@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Ticket Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .confidence-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">🤖 AI Ticket Assistant</h1>
+                    <p class="text-blue-100 mt-1">Assistenza intelligente per il customer service</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-sm text-blue-100">Powered by</div>
+                    <div class="text-lg font-semibold">DataPizza AI</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Tickets List View -->
+        <div id="ticketsListView" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-bold text-gray-800">Ticket Aperti</h2>
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-gray-500">Aggiornato:</span>
+                    <span id="lastUpdate" class="text-sm font-medium text-gray-700"></span>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingTickets" class="flex items-center justify-center py-12">
+                <div class="loading-spinner"></div>
+                <span class="ml-3 text-gray-600">Caricamento ticket...</span>
+            </div>
+
+            <!-- Tickets Grid -->
+            <div id="ticketsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+            </div>
+        </div>
+
+        <!-- Ticket Detail View -->
+        <div id="ticketDetailView" class="hidden">
+            <div class="flex items-center mb-6">
+                <button id="backToList" class="flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Torna alla lista
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Ticket Details -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div id="ticketDetails">
+                            <!-- Content filled by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Assistant Panel -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-md">
+                        <!-- AI Assistant Header -->
+                        <div class="border-b border-gray-200 p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                                <span class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                    🤖
+                                </span>
+                                AI Assistant
+                            </h3>
+                            <p class="text-gray-600 mt-1">Genera una risposta intelligente basata sulla documentazione aziendale</p>
+                        </div>
+
+                        <!-- AI Content -->
+                        <div class="p-6">
+                            <!-- Initial State -->
+                            <div id="aiInitialState" class="text-center py-12">
+                                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-medium text-gray-800 mb-2">Pronto ad aiutarti!</h4>
+                                <p class="text-gray-600 mb-6">Clicca il pulsante per generare una risposta intelligente</p>
+                                <button id="generateResponseBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors inline-flex items-center">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                    Suggerisci Risposta con AI
+                                </button>
+                            </div>
+
+                            <!-- Loading State -->
+                            <div id="aiLoadingState" class="text-center py-12 hidden">
+                                <div class="loading-spinner mx-auto mb-4"></div>
+                                <h4 class="text-lg font-medium text-gray-800 mb-2">AI sta analizzando...</h4>
+                                <p class="text-gray-600">Ricerca di documenti rilevanti e generazione della risposta</p>
+                            </div>
+
+                            <!-- AI Response -->
+                            <div id="aiResponseState" class="hidden fade-in">
+                                <!-- Response Editor -->
+                                <div class="mb-6">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <label class="block text-sm font-medium text-gray-700">Risposta Suggerita</label>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-sm text-gray-500">Tono:</span>
+                                            <select id="toneSelector" class="text-sm border border-gray-300 rounded px-2 py-1">
+                                                <option value="professional">Professionale</option>
+                                                <option value="friendly">Amichevole</option>
+                                                <option value="technical">Tecnico</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <textarea id="responseEditor" rows="8" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="La risposta AI apparirà qui..."></textarea>
+                                </div>
+
+                                <!-- Confidence Score -->
+                                <div class="mb-6">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-700">Affidabilità AI</span>
+                                        <span id="confidencePercentage" class="text-sm font-bold text-blue-600">0%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div id="confidenceBar" class="confidence-bar h-2 rounded-full" style="width: 0%;"></div>
+                                    </div>
+                                    <p id="confidenceText" class="text-xs text-gray-500 mt-1"></p>
+                                </div>
+
+                                <!-- Sources -->
+                                <div class="mb-6">
+                                    <h5 class="text-sm font-medium text-gray-700 mb-3">Fonti Utilizzate</h5>
+                                    <div id="sourcesList" class="space-y-2">
+                                        <!-- Sources filled by JavaScript -->
+                                    </div>
+                                </div>
+
+                                <!-- Reasoning -->
+                                <div class="mb-6">
+                                    <h5 class="text-sm font-medium text-gray-700 mb-2">Ragionamento AI</h5>
+                                    <p id="reasoningText" class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg"></p>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="flex flex-wrap gap-3">
+                                    <button id="regenerateBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                        </svg>
+                                        Rigenera
+                                    </button>
+                                    <button id="sendResponseBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                        </svg>
+                                        Invia Risposta
+                                    </button>
+                                    <button id="discardBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                        Scarta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-md mx-4 fade-in">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">Risposta Inviata!</h3>
+                <p class="text-gray-600 mb-4">Il ticket è stato risolto con successo.</p>
+                <button id="closeSuccessModal" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                    Torna alla Lista
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentTicket = null;
+        let tickets = [];
+        const API_BASE = 'http://localhost:8000/api';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadTickets();
+            setupEventListeners();
+            updateTimestamp();
+        });
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('backToList').addEventListener('click', showTicketsList);
+            document.getElementById('generateResponseBtn').addEventListener('click', generateResponse);
+            document.getElementById('regenerateBtn').addEventListener('click', regenerateResponse);
+            document.getElementById('sendResponseBtn').addEventListener('click', sendResponse);
+            document.getElementById('discardBtn').addEventListener('click', discardResponse);
+            document.getElementById('closeSuccessModal').addEventListener('click', closeSuccessModal);
+            document.getElementById('toneSelector').addEventListener('change', regenerateResponse);
+        }
+
+        // Load tickets from API
+        async function loadTickets() {
+            try {
+                const response = await fetch(`${API_BASE}/tickets/examples`);
+                if (!response.ok) throw new Error('Failed to load tickets');
+
+                const data = await response.json();
+                tickets = data.tickets;
+
+                renderTickets();
+                document.getElementById('loadingTickets').classList.add('hidden');
+                document.getElementById('ticketsGrid').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error loading tickets:', error);
+                showError('Errore nel caricamento dei ticket');
+            }
+        }
+
+        // Render tickets grid
+        function renderTickets() {
+            const grid = document.getElementById('ticketsGrid');
+            grid.innerHTML = '';
+
+            tickets.forEach(ticket => {
+                const card = createTicketCard(ticket);
+                grid.appendChild(card);
+            });
+        }
+
+        // Create ticket card
+        function createTicketCard(ticket) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-md p-6 card-hover cursor-pointer';
+
+            const priorityColors = {
+                high: 'bg-red-100 text-red-800',
+                medium: 'bg-yellow-100 text-yellow-800',
+                low: 'bg-green-100 text-green-800'
+            };
+
+            const categoryColors = {
+                IT: 'bg-blue-100 text-blue-800',
+                HR: 'bg-purple-100 text-purple-800',
+                'Customer Service': 'bg-orange-100 text-orange-800'
+            };
+
+            card.innerHTML = `
+                <div class="flex items-start justify-between mb-3">
+                    <span class="text-sm font-medium text-gray-500">${ticket.id}</span>
+                    <span class="px-2 py-1 rounded-full text-xs font-medium ${priorityColors[ticket.priority] || 'bg-gray-100 text-gray-800'}">
+                        ${ticket.priority === 'high' ? 'Alta' : ticket.priority === 'medium' ? 'Media' : 'Bassa'}
+                    </span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">${ticket.subject}</h3>
+                <p class="text-gray-600 text-sm mb-4 line-clamp-3">${ticket.message.substring(0, 120)}...</p>
+                <div class="flex items-center justify-between">
+                    <span class="px-2 py-1 rounded-full text-xs font-medium ${categoryColors[ticket.category] || 'bg-gray-100 text-gray-800'}">
+                        ${ticket.category}
+                    </span>
+                    <span class="text-xs text-gray-500">2 ore fa</span>
+                </div>
+            `;
+
+            card.addEventListener('click', () => showTicketDetail(ticket));
+            return card;
+        }
+
+        // Show ticket detail
+        function showTicketDetail(ticket) {
+            currentTicket = ticket;
+
+            // Render ticket details
+            const detailsContainer = document.getElementById('ticketDetails');
+            detailsContainer.innerHTML = `
+                <div class="mb-4">
+                    <span class="text-sm font-medium text-gray-500">Ticket ID</span>
+                    <p class="text-lg font-semibold text-gray-800">${ticket.id}</p>
+                </div>
+                <div class="mb-4">
+                    <span class="text-sm font-medium text-gray-500">Oggetto</span>
+                    <p class="text-gray-800 font-medium">${ticket.subject}</p>
+                </div>
+                <div class="mb-4">
+                    <span class="text-sm font-medium text-gray-500">Categoria</span>
+                    <p class="text-gray-800">${ticket.category}</p>
+                </div>
+                <div class="mb-4">
+                    <span class="text-sm font-medium text-gray-500">Priorità</span>
+                    <p class="text-gray-800">${ticket.priority === 'high' ? 'Alta' : ticket.priority === 'medium' ? 'Media' : 'Bassa'}</p>
+                </div>
+                <div class="mb-4">
+                    <span class="text-sm font-medium text-gray-500">Messaggio</span>
+                    <div class="mt-2 p-3 bg-gray-50 rounded-lg">
+                        <p class="text-gray-800 text-sm leading-relaxed">${ticket.message}</p>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-sm font-medium text-gray-500">Ricevuto</span>
+                    <p class="text-gray-800">2 ore fa</p>
+                </div>
+            `;
+
+            // Reset AI state
+            resetAIState();
+
+            // Show detail view
+            document.getElementById('ticketsListView').classList.add('hidden');
+            document.getElementById('ticketDetailView').classList.remove('hidden');
+        }
+
+        // Show tickets list
+        function showTicketsList() {
+            document.getElementById('ticketDetailView').classList.add('hidden');
+            document.getElementById('ticketsListView').classList.remove('hidden');
+            currentTicket = null;
+        }
+
+        // Reset AI state
+        function resetAIState() {
+            document.getElementById('aiInitialState').classList.remove('hidden');
+            document.getElementById('aiLoadingState').classList.add('hidden');
+            document.getElementById('aiResponseState').classList.add('hidden');
+        }
+
+        // Generate AI response
+        async function generateResponse() {
+            if (!currentTicket) return;
+
+            // Show loading state
+            document.getElementById('aiInitialState').classList.add('hidden');
+            document.getElementById('aiResponseState').classList.add('hidden');
+            document.getElementById('aiLoadingState').classList.remove('hidden');
+
+            try {
+                const tone = document.getElementById('toneSelector').value;
+                const response = await fetch(`${API_BASE}/tickets/generate-response`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        ticket: currentTicket,
+                        tone: tone
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to generate response');
+
+                const data = await response.json();
+                displayAIResponse(data);
+
+            } catch (error) {
+                console.error('Error generating response:', error);
+                showError('Errore nella generazione della risposta AI');
+                resetAIState();
+            }
+        }
+
+        // Regenerate response
+        async function regenerateResponse() {
+            if (!currentTicket) return;
+            await generateResponse();
+        }
+
+        // Display AI response
+        function displayAIResponse(data) {
+            // Hide loading, show response
+            document.getElementById('aiLoadingState').classList.add('hidden');
+            document.getElementById('aiResponseState').classList.remove('hidden');
+
+            // Fill response editor
+            document.getElementById('responseEditor').value = data.suggested_response;
+
+            // Update confidence
+            const confidence = Math.round(data.confidence_score * 100);
+            document.getElementById('confidencePercentage').textContent = `${confidence}%`;
+            document.getElementById('confidenceBar').style.width = `${confidence}%`;
+
+            // Color confidence bar
+            const bar = document.getElementById('confidenceBar');
+            if (confidence >= 80) {
+                bar.className = 'confidence-bar h-2 rounded-full bg-green-500';
+                document.getElementById('confidenceText').textContent = 'Affidabilità alta - Risposta molto accurata';
+            } else if (confidence >= 60) {
+                bar.className = 'confidence-bar h-2 rounded-full bg-yellow-500';
+                document.getElementById('confidenceText').textContent = 'Affidabilità media - Controlla la risposta';
+            } else {
+                bar.className = 'confidence-bar h-2 rounded-full bg-red-500';
+                document.getElementById('confidenceText').textContent = 'Affidabilità bassa - Verifica accuratamente';
+            }
+
+            // Display sources
+            const sourcesList = document.getElementById('sourcesList');
+            sourcesList.innerHTML = '';
+
+            data.sources.forEach(source => {
+                const sourceCard = document.createElement('div');
+                sourceCard.className = 'bg-gray-50 rounded-lg p-3';
+
+                const typeIcon = source.type === 'knowledge_base' ? '📚' : '🎫';
+                const relevancePercentage = Math.round(source.relevance * 100);
+
+                sourceCard.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-800 flex items-center">
+                            ${typeIcon} ${source.title}
+                        </span>
+                        <span class="text-xs text-gray-500">${relevancePercentage}% rilevanza</span>
+                    </div>
+                    <p class="text-xs text-gray-600">${source.snippet}</p>
+                `;
+
+                sourcesList.appendChild(sourceCard);
+            });
+
+            // Display reasoning
+            document.getElementById('reasoningText').textContent = data.reasoning;
+        }
+
+        // Send response
+        function sendResponse() {
+            // Show success modal
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('successModal').classList.add('flex');
+        }
+
+        // Close success modal
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('successModal').classList.remove('flex');
+            showTicketsList();
+        }
+
+        // Discard response
+        function discardResponse() {
+            if (confirm('Sei sicuro di voler scartare questa risposta?')) {
+                resetAIState();
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            alert(message); // In a real app, use a proper toast/notification system
+        }
+
+        // Update timestamp
+        function updateTimestamp() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('it-IT', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('lastUpdate').textContent = timeString;
+        }
+    </script>
+</body>
+</html>

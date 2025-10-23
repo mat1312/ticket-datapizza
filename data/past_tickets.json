@@ -1,0 +1,86 @@
+[
+  {
+    "id": "T001",
+    "category": "IT",
+    "priority": "high",
+    "subject": "Impossibile accedere alla VPN aziendale",
+    "message": "Buongiorno, da ieri non riesco più ad accedere alla VPN. Inserisco le mie credenziali ma mi appare errore 'Autenticazione fallita'. Ho già provato a cambiare password ma il problema persiste. Ho bisogno urgentemente di accedere ai file del server per completare il progetto.",
+    "response": "Gentile utente, ho verificato il suo account e risulta bloccato a causa di troppi tentativi di login falliti. Ho proceduto allo sblocco immediato. Il problema era dovuto a una cache delle credenziali vecchie nel client OpenVPN.\n\nPer risolvere:\n1. Chiuda completamente il client VPN\n2. Vada in Gestione Credenziali Windows e rimuova quelle relative a vpn.company.com\n3. Riapra il client e inserisca le nuove credenziali\n\nSe il problema persiste, può provare il server alternativo vpn2.company.com:1194. L'account è ora funzionante e può accedere normalmente.",
+    "resolution": "resolved",
+    "satisfaction": 5,
+    "tags": ["vpn", "authentication", "credentials", "account-locked"],
+    "resolved_at": "2024-10-20T14:30:00Z"
+  },
+  {
+    "id": "T002",
+    "category": "HR",
+    "priority": "medium",
+    "subject": "Richiesta ferie periodo estivo",
+    "message": "Salve, vorrei richiedere 2 settimane di ferie ad agosto (dal 5 al 18). È la prima volta che faccio richiesta e non so come procedere. Quali documenti devo preparare? Devo avvisare qualcuno in particolare? Quando devo fare la richiesta?",
+    "response": "Gentile collega, per richiedere le ferie estive deve seguire questa procedura:\n\n1. Acceda al portale HR su hr.company.com con le sue credenziali Windows\n2. Sezione 'Richiesta Assenze' → 'Ferie Annuali'\n3. Compili il modulo indicando dal 5 al 18 agosto\n\nPer il periodo estivo è richiesto un preavviso di 30 giorni, quindi deve presentare la richiesta entro il 5 luglio. Non servono documenti aggiuntivi per ferie standard.\n\nLa richiesta sarà approvata automaticamente dal suo responsabile diretto entro 5 giorni lavorativi. Riceverà una email di conferma con tutti i dettagli.",
+    "resolution": "resolved",
+    "satisfaction": 5,
+    "tags": ["vacation", "summer", "hr-portal", "procedure"],
+    "resolved_at": "2024-10-21T10:15:00Z"
+  },
+  {
+    "id": "T003",
+    "category": "Customer Service",
+    "priority": "high",
+    "subject": "Ordine in ritardo e cliente insoddisfatto",
+    "message": "Il cliente Mario Rossi (ordine #CS2024-891) ha chiamato molto arrabbiato. Il suo ordine doveva arrivare 5 giorni fa e ancora non c'è traccia. È un cliente premium e minaccia di cambiare fornitore. Ha già avuto problemi simili in passato. Come gestisco la situazione?",
+    "response": "Ho gestito immediatamente il caso del sig. Rossi. Situazione risolta come segue:\n\n1. TRACKING: L'ordine era fermo al centro smistamento per un problema tecnico\n2. ACCELERAZIONE: Ho richiesto spedizione express immediata, arriverà domani\n3. COMPENSAZIONE: Applicato sconto 25% + spedizione gratuita per i prossimi 3 ordini\n4. ESCALATION: Informato l'account manager dedicato per follow-up personalizzato\n\nIl cliente si è dimostrato soddisfatto delle soluzioni proposte. Ho annotato nel suo profilo la necessità di monitoraggio speciale per i prossimi ordini. Per clienti premium con problemi ricorrenti, escalation automatica a Supervisor.",
+    "resolution": "resolved",
+    "satisfaction": 4,
+    "tags": ["premium-customer", "delay", "compensation", "escalation"],
+    "resolved_at": "2024-10-21T16:45:00Z"
+  },
+  {
+    "id": "T004",
+    "category": "IT",
+    "priority": "medium",
+    "subject": "Outlook non sincronizza le email",
+    "message": "Le email di Outlook non si aggiornano da stamattina. Vedo ancora le email di ieri sera ma non arriva nulla di nuovo. Ho provato a riavviare il programma ma non cambia nulla. Uso Outlook 2019 su Windows 10.",
+    "response": "Il problema è comune e facilmente risolvibile. Outlook ha perso la sincronizzazione con il server di posta.\n\nSoluzione applicata:\n1. Chiuso Outlook completamente\n2. Andato in Pannello di Controllo → Account di Posta → Testare impostazioni account\n3. Errore di timeout rilevato\n4. Rimosso e riconfigurato l'account email\n5. Impostazioni corrette: mail.company.com, porta 993 IMAP\n\nLa sincronizzazione è ripresa immediatamente. Le email mancanti sono state scaricate tutte. Consiglio di verificare periodicamente la cartella 'Elementi eliminati' per evitare che si riempia.",
+    "resolution": "resolved",
+    "satisfaction": 5,
+    "tags": ["outlook", "email", "sync-issue", "configuration"],
+    "resolved_at": "2024-10-22T09:20:00Z"
+  },
+  {
+    "id": "T005",
+    "category": "Customer Service",
+    "priority": "medium",
+    "subject": "Richiesta reso per prodotto difettoso",
+    "message": "Ho ricevuto ieri la stampante wireless (ordine #CS2024-1205) ma non funziona. Si accende ma non si connette al WiFi. Ho seguito tutte le istruzioni ma niente. Vorrei restituirla e avere il rimborso completo.",
+    "response": "Mi dispiace per l'inconveniente con la stampante. Ho verificato l'ordine e procedo immediatamente:\n\n1. RESO AUTORIZZATO: RMA #RMA-2024-3891 generato\n2. ETICHETTA: Inviata via email per spedizione gratuita\n3. RIMBORSO: 189€ verranno accreditati sulla sua carta entro 3-5 giorni dalla ricezione\n4. GESTO COMMERCIALE: Buono sconto 20% per futuro acquisto (codice SORRY20)\n\nNon è necessario restituire gli accessori (cavi, CD) se sono integri. Il reso deve essere spedito entro 7 giorni. Per prodotti difettosi entro 30 giorni offriamo sempre rimborso completo senza discussioni.",
+    "resolution": "resolved",
+    "satisfaction": 5,
+    "tags": ["defective-product", "return", "refund", "wifi-issue"],
+    "resolved_at": "2024-10-22T14:10:00Z"
+  },
+  {
+    "id": "T006",
+    "category": "HR",
+    "priority": "low",
+    "subject": "Informazioni su permessi per visite mediche",
+    "message": "Devo fare alcune visite mediche specialistiche nei prossimi mesi. Volevo sapere come funziona per i permessi retribuiti. Devo portare dei documenti? Posso farle durante l'orario di lavoro?",
+    "response": "Certamente può usufruire di permessi retribuiti per visite mediche. Ecco la procedura:\n\nDOCUMENTAZIONE RICHIESTA:\n- Certificato di prenotazione della visita (basta anche SMS/email di conferma)\n- Dopo la visita: certificato medico o ricevuta che attesti l'avvenuta prestazione\n\nPROCEDURA:\n1. Comunicare in anticipo al responsabile diretto\n2. Inviare copia del certificato di prenotazione a hr@company.com\n3. Il permesso è automaticamente autorizzato\n4. Portare documentazione post-visita entro 3 giorni\n\nI permessi per visite mediche sono completamente retribuiti e non hanno limitazioni di numero, purché documentati correttamente.",
+    "resolution": "resolved",
+    "satisfaction": 5,
+    "tags": ["medical-leave", "documentation", "procedure", "paid-leave"],
+    "resolved_at": "2024-10-22T11:30:00Z"
+  },
+  {
+    "id": "T007",
+    "category": "Customer Service",
+    "priority": "low",
+    "subject": "Domanda sui tempi di spedizione internazionale",
+    "message": "Sto per ordinare alcuni prodotti da spedire negli Stati Uniti. Vorrei sapere i tempi di consegna e se ci sono restrizioni particolari. L'ordine è di circa 500€.",
+    "response": "Per le spedizioni negli Stati Uniti i tempi standard sono:\n\nTEMPI DI CONSEGNA:\n- Spedizione Standard: 7-10 giorni lavorativi\n- Spedizione Express: 3-5 giorni lavorativi (+35€)\n- Spedizione Priority: 1-2 giorni lavorativi (+65€)\n\nCOSTI E RESTRIZIONI:\n- Spedizione gratuita per ordini >300€ (raggiunta con il suo ordine)\n- Nessuna restrizione per i nostri prodotti standard\n- Dazi doganali: gestiti dal corriere, pagamento alla consegna\n- Tracking completo disponibile\n\nConsiglio la spedizione standard che è gratuita e affidabile. Riceverà il numero di tracking entro 24h dalla spedizione.",
+    "resolution": "resolved",
+    "satisfaction": 5,
+    "tags": ["international-shipping", "usa", "delivery-times", "costs"],
+    "resolved_at": "2024-10-23T08:45:00Z"
+  }
+]

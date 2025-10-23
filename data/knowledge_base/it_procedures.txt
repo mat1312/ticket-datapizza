@@ -1,0 +1,87 @@
+PROCEDURE IT AZIENDALI - GUIDA OPERATIVA
+
+=== ACCESSO VPN ===
+
+CONFIGURAZIONE INIZIALE:
+- Scaricare il client OpenVPN dal portale aziendale (portal.company.com)
+- Utilizzare le credenziali Windows aziendali per l'autenticazione
+- Server VPN: vpn.company.com:1194
+- Protocollo: OpenVPN con certificato aziendale
+
+RESET PASSWORD VPN:
+1. Andare su portal.company.com → Gestione Account
+2. Selezionare "Reset Password VPN"
+3. Inserire il proprio numero di telefono aziendale
+4. Riceverai un SMS con il codice temporaneo
+5. Utilizzare il codice per impostare una nuova password
+6. La password deve contenere: 8+ caratteri, maiuscole, minuscole, numeri, simboli
+
+TROUBLESHOOTING VPN:
+- Errore "Timeout connessione": Verificare firewall Windows e antivirus
+- Errore "Certificato scaduto": Contattare IT per rinnovo certificato
+- Errore "Autenticazione fallita": Verificare username/password e fare reset se necessario
+- Performance lenta: Provare server alternativo vpn2.company.com:1194
+
+=== PROBLEMI EMAIL ===
+
+OUTLOOK NON SINCRONIZZA:
+1. Chiudere completamente Outlook
+2. Andare in Pannello di Controllo → Account di Posta
+3. Testare impostazioni account
+4. Se errore, rimuovere e riconfigurare l'account
+5. Server: mail.company.com, Porta: 993 (IMAP) o 995 (POP3)
+
+CASELLA PIENA:
+- Quota massima: 2GB per utente
+- Controllare cartella "Elementi eliminati" e svuotarla
+- Archiviare email vecchie di oltre 6 mesi
+- Utilizzare OneDrive per allegati grandi (>10MB)
+
+=== ACCESSI SOFTWARE ===
+
+ACCOUNT BLOCCATO:
+- Dopo 3 tentativi di login errati l'account si blocca per 30 minuti
+- Per sblocco immediato: chiamare Helpdesk IT al numero 800-123-456
+- Orari supporto: Lun-Ven 8:00-18:00
+
+SOFTWARE AZIENDALE:
+- Office 365: Licenza assegnata automaticamente a tutti i dipendenti
+- Antivirus: Symantec Endpoint Protection (aggiornamento automatico)
+- VPN Client: Disponibile su portal.company.com
+- Software aggiuntivi: Richiedere via ticket al reparto IT
+
+=== CONTATTI SUPPORTO ===
+
+HELPDESK IT:
+- Telefono: 800-123-456 (interno 456)
+- Email: helpdesk@company.com
+- Chat interna: Teams → Canale "IT Support"
+- Ticket online: portal.company.com → Nuovo Ticket
+
+RESPONSABILI:
+- IT Manager: Mario Rossi (mario.rossi@company.com)
+- Network Admin: Laura Bianchi (laura.bianchi@company.com)
+- Security Officer: Giuseppe Verdi (giuseppe.verdi@company.com)
+
+ESCALATION:
+- Livello 1: Helpdesk (problemi comuni)
+- Livello 2: Tecnici specializzati (problemi complessi)
+- Livello 3: Manager IT (decisioni architetturali)
+
+=== POLICY SICUREZZA ===
+
+PASSWORD:
+- Cambio obbligatorio ogni 90 giorni
+- Non riutilizzare le ultime 12 password
+- Utilizzare il password manager aziendale (Keeper)
+- Non condividere mai le credenziali
+
+BACKUP:
+- I dati sui PC sono sottoposti a backup automatico ogni notte
+- Backup OneDrive: sincronizzazione in tempo reale
+- Recovery: Contattare IT per ripristino file (retention 90 giorni)
+
+INCIDENTI SICUREZZA:
+- Phishing sospetto: Inoltrare a security@company.com
+- Malware rilevato: Disconnettere immediatamente la rete e chiamare IT
+- Furto/smarrimento device: Chiamare immediatamente il numero 800-123-456

@@ -1,0 +1,124 @@
+POLICY RISORSE UMANE - MANUALE DIPENDENTI
+
+=== RICHIESTA FERIE ===
+
+PROCEDURA STANDARD:
+1. Accedere al portale HR: hr.company.com
+2. Selezionare "Richiesta Assenze" → "Ferie Annuali"
+3. Compilare il modulo con:
+   - Date di inizio e fine
+   - Tipologia ferie (godimento, recupero, straordinari)
+   - Note aggiuntive se necessario
+4. Sottomettere richiesta almeno 15 giorni prima
+5. Attendere approvazione del responsabile diretto
+
+TEMPISTICHE:
+- Richieste standard: minimo 15 giorni di preavviso
+- Periodi estivi (Giugno-Settembre): minimo 30 giorni di preavviso
+- Periodi natalizi (20 Dic - 10 Gen): minimo 45 giorni di preavviso
+- Emergenze familiari: nessun preavviso richiesto (documentazione necessaria)
+
+DOCUMENTI NECESSARI:
+- Modulo richiesta ferie (compilabile online)
+- Per periodi superiori a 10 giorni: piano di sostituzione
+- Per ferie all'estero: copia del passaporto (per assicurazione aziendale)
+
+APPROVAZIONE:
+- Responsabile diretto: entro 5 giorni lavorativi
+- HR: validazione automatica se conforme alle policy
+- Dipendente riceve email di conferma con dettagli
+
+=== PERMESSI E ASSENZE ===
+
+PERMESSI RETRIBUITI:
+- Malattia: certificato medico obbligatorio dal 1° giorno
+- Visite mediche: certificato di prenotazione sufficiente
+- Matrimonio proprio: 15 giorni consecutivi
+- Matrimonio parenti: 1-3 giorni a seconda del grado di parentela
+- Lutto: 3 giorni per parenti di 1° grado, 1 giorno per 2° grado
+
+CONGEDI SPECIALI:
+- Maternità: 5 mesi (2 prima + 3 dopo il parto)
+- Paternità: 10 giorni obbligatori + 1 facoltativo
+- Congedo parentale: fino a 6 mesi entro i 12 anni del figlio
+- Legge 104: permessi secondo normativa vigente
+
+PROCEDURE MALATTIA:
+1. Comunicare l'assenza entro le 9:00 del primo giorno
+2. Chiamare il numero HR 800-555-123 o inviare email a hr@company.com
+3. Presentare certificato medico entro 2 giorni (anche via email)
+4. Per malattie oltre 3 giorni: possibile visita fiscale
+
+=== ORARI E SMART WORKING ===
+
+ORARI STANDARD:
+- Orario pieno: 40 ore/settimana
+- Core hours: 10:00-15:00 (presenza obbligatoria)
+- Flessibilità: ingresso 8:00-10:00, uscita 16:00-19:00
+- Pausa pranzo: minimo 30 minuti, massimo 2 ore
+
+SMART WORKING:
+- Diritto: 2 giorni/settimana per tutti i dipendenti
+- Prenotazione: tramite portale hr.company.com
+- Orari: mantenere gli stessi dell'ufficio
+- Reperibilità: disponibile durante core hours
+- Attrezzatura: laptop aziendale e connessione stabile richiesta
+
+STRAORDINARI:
+- Autorizzazione preventiva del responsabile richiesta
+- Massimo 8 ore/settimana senza autorizzazione speciale
+- Recupero: preferibile al pagamento (da concordare)
+- Retribuzione: +25% per ore feriali, +50% per festivi
+
+=== FORMAZIONE E SVILUPPO ===
+
+FORMAZIONE OBBLIGATORIA:
+- Sicurezza sul lavoro: corso annuale obbligatorio
+- GDPR: aggiornamento ogni 2 anni
+- Antiriciclaggio: per ruoli esposti
+- Formazione specifica: per ogni cambio di ruolo
+
+BUDGET FORMAZIONE:
+- Ogni dipendente ha diritto a 1000€/anno per formazione
+- Corsi esterni: richiedere pre-approvazione
+- Certificazioni: rimborso 100% se superato l'esame
+- Conferenze: massimo 2 eventi/anno
+
+VALUTAZIONE PERFORMANCE:
+- Revisione annuale: entro marzo di ogni anno
+- Obiettivi trimestrali: definiti con il responsabile
+- Feedback continuo: sistema di 360° feedback
+- Piani di sviluppo: concordati durante la revisione annuale
+
+=== BENEFITS E WELFARE ===
+
+BENEFIT AZIENDALI:
+- Assicurazione sanitaria: copertura 100% per dipendente, 50% per famiglia
+- Buoni pasto: 8€/giorno lavorativo
+- Abbonamento mezzi pubblici: rimborso 70%
+- Parcheggio aziendale: gratuito (su prenotazione)
+
+WELFARE AZIENDALE:
+- Piattaforma benefits: credito 1200€/anno
+- Flexible benefits: sanità, istruzione, trasporti, tempo libero
+- Convenzioni: palestre, asili nido, centri benessere
+- Previdenza complementare: contributo aziendale 2%
+
+=== CONTATTI HR ===
+
+UFFICIO RISORSE UMANE:
+- Telefono: 800-555-123
+- Email generale: hr@company.com
+- Orari: Lun-Ven 9:00-17:00
+- Sportello fisico: Piano 2, Stanza 205
+
+REFERENTI SPECIFICI:
+- Responsabile HR: Anna Ferretti (anna.ferretti@company.com)
+- Amministrazione personale: Marco Giuliani (marco.giuliani@company.com)
+- Formazione e sviluppo: Silvia Mancini (silvia.mancini@company.com)
+- Welfare: Roberto Santoro (roberto.santoro@company.com)
+
+EMERGENZE:
+- Infortuni sul lavoro: chiamare immediatamente 800-555-911
+- Problemi gravi: Responsabile HR o Direttore Generale
+- Segnalazioni anonime: ethics@company.com
