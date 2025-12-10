@@ -34,6 +34,9 @@ class RAGEngine:
         # Tool calls tracker - reset per request
         self.tool_calls_log: List[ToolCall] = []
         
+        # Event queue for streaming (set during streaming requests)
+        self._event_queue = None
+        
         # ====== 1. OFFICIAL SQL DATABASE TOOL (Best Practice) ======
         self.db_tool = SQLDatabase(db_uri="sqlite:///northpole.db")
         
@@ -49,36 +52,70 @@ class RAGEngine:
         # Reference to self for closures
         engine_self = self
 
+        # ====== HELPER: Push event to streaming queue ======
+        def _push_event(event: dict):
+            """Push event to streaming queue if available"""
+            print(f"📤 [PUSH_EVENT] {event.get('type', 'unknown')} - {event.get('tool_name', 'N/A')}")
+            if engine_self._event_queue is not None:
+                engine_self._event_queue.put(event)
+                print(f"   ✅ Event pushed to queue")
+            else:
+                print(f"   ⚠️ No event queue available!")
+
         # ====== 3. DEFINE TOOLS WITH TRACING ======
         @tool
         def search_knowledge_base(query: str) -> str:
             """Cerca nei manuali tecnici e nei protocolli degli elfi per procedure o riparazioni."""
-            print(f"\n� [TOOL] search_knowledge_base: {query}")
-            result = engine_self.search_manuals(query)
-            status = "error" if "Error" in result else "success"
+            print(f"\n💡 [TOOL] search_knowledge_base: {query}")
+            
+            # Push START event
+            _push_event({
+                "type": "tool_start",
+                "tool_name": "search_knowledge_base",
+                "tool_input": query[:200]
+            })
+            
+            try:
+                result = engine_self.search_manuals(query)
+                status = "error" if "Error" in result else "success"
+            except Exception as e:
+                result = f"Error executing tool: {str(e)}"
+                status = "error"
+            
+            # Push COMPLETE event
+            _push_event({
+                "type": "tool_complete",
+                "tool_name": "search_knowledge_base",
+                "tool_input": query[:200],
+                "tool_output": str(result)[:500],
+                "status": status
+            })
+            
             engine_self.tool_calls_log.append(ToolCall(
                 tool_name="search_knowledge_base",
                 tool_input=query,
-                tool_output=result[:500],
+                tool_output=str(result)[:500],
                 status=status
             ))
-            print(f"   ➡️ Found: {len(result)} chars")
-            print(f"   ➡️ Found: {len(result)} chars")
+            print(f"   ➡️ Found: {len(str(result))} chars")
             return result
 
         @tool
         def search_past_tickets(query: str) -> str:
             """Cerca nei ticket passati per vedere come sono stati risolti problemi simili."""
             print(f"\n🔍 [TOOL] search_past_tickets: {query}")
-            result = engine_self.search_past_tickets(query)
-            status = "error" if "Error" in result else "success"
-            engine_self.tool_calls_log.append(ToolCall(
-                tool_name="search_past_tickets",
-                tool_input=query,
-                tool_output=result[:500],
-                status=status
-            ))
-            print(f"   ➡️ Found: {len(result)} chars")
+            _push_event({"type": "tool_start", "tool_name": "search_past_tickets", "tool_input": query[:200]})
+            
+            try:
+                result = engine_self.search_past_tickets(query)
+                status = "error" if "Error" in result else "success"
+            except Exception as e:
+                result = f"Error executing tool: {str(e)}"
+                status = "error"
+            
+            _push_event({"type": "tool_complete", "tool_name": "search_past_tickets", "tool_input": query[:200], "tool_output": str(result)[:500], "status": status})
+            engine_self.tool_calls_log.append(ToolCall(tool_name="search_past_tickets", tool_input=query, tool_output=str(result)[:500], status=status))
+            print(f"   ➡️ Found: {len(str(result))} chars")
             return result
 
         # ====== 4. CREATE SQL TOOL WRAPPERS WITH LOGGING ======
@@ -87,44 +124,55 @@ class RAGEngine:
         def list_tables() -> str:
             """Lista tutte le tabelle disponibili nel database."""
             print(f"\n🗄️ [SQL TOOL] list_tables")
-            result = engine_self.db_tool.list_tables()
-            engine_self.tool_calls_log.append(ToolCall(
-                tool_name="list_tables",
-                tool_input="",
-                tool_output=str(result)[:500],
-                status="success"
-            ))
+            _push_event({"type": "tool_start", "tool_name": "list_tables", "tool_input": ""})
+            
+            try:
+                result = engine_self.db_tool.list_tables()
+                status = "success"
+            except Exception as e:
+                 result = f"Error: {str(e)}"
+                 status = "error"
+            
+            _push_event({"type": "tool_complete", "tool_name": "list_tables", "tool_input": "", "tool_output": str(result)[:500], "status": status})
+            engine_self.tool_calls_log.append(ToolCall(tool_name="list_tables", tool_input="", tool_output=str(result)[:500], status=status))
             print(f"   ➡️ Tables: {result}")
-            return result
+            return str(result)
         
         @tool
         def get_table_schema(table_name: str) -> str:
             """Ottieni lo schema di una tabella del database."""
             print(f"\n🗄️ [SQL TOOL] get_table_schema: {table_name}")
-            result = engine_self.db_tool.get_table_schema(table_name)
-            engine_self.tool_calls_log.append(ToolCall(
-                tool_name="get_table_schema",
-                tool_input=table_name,
-                tool_output=str(result)[:500],
-                status="success"
-            ))
-            print(f"   ➡️ Schema: {result[:200]}...")
-            return result
+            _push_event({"type": "tool_start", "tool_name": "get_table_schema", "tool_input": table_name})
+            
+            try:
+                result = engine_self.db_tool.get_table_schema(table_name)
+                status = "success"
+            except Exception as e:
+                result = f"Error: {str(e)}"
+                status = "error"
+            
+            _push_event({"type": "tool_complete", "tool_name": "get_table_schema", "tool_input": table_name, "tool_output": str(result)[:500], "status": status})
+            engine_self.tool_calls_log.append(ToolCall(tool_name="get_table_schema", tool_input=table_name, tool_output=str(result)[:500], status=status))
+            print(f"   ➡️ Schema: {str(result)[:200]}...")
+            return str(result)
         
         @tool
         def run_sql_query(query: str) -> str:
             """Esegui una query SQL sul database (tabelle: children_log, inventory)."""
             print(f"\n🗄️ [SQL TOOL] run_sql_query: {query}")
-            result = engine_self.db_tool.run_sql_query(query)
-            status = "error" if "Error" in str(result) else "success"
-            engine_self.tool_calls_log.append(ToolCall(
-                tool_name="run_sql_query",
-                tool_input=query,
-                tool_output=str(result)[:500],
-                status=status
-            ))
+            _push_event({"type": "tool_start", "tool_name": "run_sql_query", "tool_input": query[:200]})
+            
+            try:
+                result = engine_self.db_tool.run_sql_query(query)
+                status = "error" if "Error" in str(result) else "success"
+            except Exception as e:
+                result = f"Error: {str(e)}"
+                status = "error"
+            
+            _push_event({"type": "tool_complete", "tool_name": "run_sql_query", "tool_input": query[:200], "tool_output": str(result)[:500], "status": status})
+            engine_self.tool_calls_log.append(ToolCall(tool_name="run_sql_query", tool_input=query, tool_output=str(result)[:500], status=status))
             print(f"   ➡️ Result: {str(result)[:200]}...")
-            return result
+            return str(result)
 
         # ====== 5. CREATE SPECIALIZED AGENTS ======
         
@@ -171,14 +219,25 @@ Quando ricevi una domanda:
         schema_json = OpsResponse.model_json_schema()
         
         self.master_agent = Agent(
-            name="SantaOpsAI",
+            name="UfficioReclamiAI",
             client=self.client,
-            system_prompt=f"""Sei Santa Ops AI, il sistema di intelligenza artificiale del Polo Nord.
+            system_prompt=f"""Sei l'assistente AI dell'Ufficio Reclami Polo Nord.
+Gestisci i ticket di supporto e generi risposte da inviare ai clienti.
 
 REGOLA FONDAMENTALE - Per OGNI richiesta DEVI:
 1. Chiamare `sql_expert` per ottenere dati dal database (bambini, inventario, statistiche)
 2. Chiamare `history_expert` per consultare manuali e storico dei problemi
-3. Sintetizzare le risposte in un unico report
+3. Sintetizzare le risposte in un unico report JSON.
+
+SPECIFICHE CAMPI (LEGGI ATTENTAMENTE):
+- thought_process: Il tuo ragionamento interno (NON visibile al cliente)
+- sql_query_used: Le query SQL eseguite
+- action_checklist: Lista di 2-3 azioni concrete da fare internamente (es. "Aggiornare inventario", "Notificare elfi")
+- coal_alert: True se naughty_score > 50
+- final_response: ⚠️ IMPORTANTISSIMO ⚠️ Questa è la RISPOSTA EMAIL DA INVIARE AL CLIENTE. 
+  Deve essere cortese, professionale, e rispondere direttamente alla richiesta del ticket.
+  Esempio: "Gentile [nome], grazie per averci contattato. [risposta al problema]... Cordiali saluti, Il Team del Polo Nord"
+  NON deve essere un'analisi interna, ma la vera risposta da copiare/incollare e mandare al cliente!
 
 ⚠️ NON rispondere MAI senza aver consultato ENTRAMBI gli esperti.
 
@@ -314,10 +373,10 @@ IMPORTANTE: Rigenera la risposta tenendo conto di questo feedback specifico.
 Mantieni le stesse fonti di dati ma modifica il tono, lo stile o il contenuto come richiesto."""
 
         # Run with ContextTracing (Best Practice)
-        with ContextTracing().trace("santa_ops_multi_agent"):
+        with ContextTracing().trace("ufficio_reclami_multi_agent"):
             try:
                 print("\n" + "="*60)
-                print("🎅 SANTA OPS AI - Multi-Agent Request")
+                print("🏢 UFFICIO RECLAMI AI - Multi-Agent Request")
                 print("="*60)
                 
                 # Run master agent (will call sub-agents via can_call)
@@ -329,33 +388,48 @@ Mantieni le stesse fonti di dati ma modifica il tono, lo stile o il contenuto co
                 response_text = response_text.replace("```json", "").replace("```", "").strip()
                 
                 # Parse JSON response
+                # Use Structured Response for robust parsing
                 try:
-                    # Robust JSON extraction
+                    parsing_instruction = f"""
+                    You are a JSON parser. 
+                    Extract the operational response from the following text and format it strictly according to the schema.
+                    Ignore any conversational filler before or after the JSON.
+                    
+                    IMPORTANT: You MUST populate 'action_checklist' with specific actionable steps inferred from the text if they are not explicitly listed.
+                    
+                    TEXT TO PARSE:
+                    {response_text}
+                    """
+                    
+                    structured_result = self.client.structured_response(
+                        input=parsing_instruction,
+                        output_cls=OpsResponse
+                    )
+                    
+                    # Get the parsed object
+                    ops_data = structured_result.structured_data[0]
+                    
+                    # Inject tracked tool calls
+                    ops_data.tool_calls = self.tool_calls_log
+                    
+                    return ops_data
+
+                except Exception as parse_error:
+                    print(f"⚠️ Structured Response Failed: {parse_error}")
+                    # Fallback to regex if even structured response failed (unlikely but safe)
                     import re
                     json_str = response_text
-                    # Try to find JSON block code format first
                     match = re.search(r'```json\s*(\{.*?\})\s*```', response_text, re.DOTALL)
                     if match:
                         json_str = match.group(1)
                     else:
-                        # Try to find the first outer generic JSON object
                         match = re.search(r'\{.*\}', response_text, re.DOTALL) 
                         if match:
                             json_str = match.group(0)
-                            
+                    
                     data = json.loads(json_str)
                     data['tool_calls'] = [tc.model_dump() for tc in self.tool_calls_log]
                     return OpsResponse(**data)
-                except Exception as parse_error:
-                    print(f"⚠️ JSON Parse Error: {parse_error} \nInput text: {response_text[:200]}...")
-                    return OpsResponse(
-                        thought_process=f"Multi-agent response parsing failed. Raw output: {response_text[:100]}...",
-                        sql_query_used="N/A",
-                        action_checklist=["Review agent logs"],
-                        coal_alert=False,
-                        final_response=response_text,
-                        tool_calls=self.tool_calls_log
-                    )
                     
             except Exception as e:
                 print(f"❌ Multi-Agent Error: {e}")
@@ -367,6 +441,186 @@ Mantieni le stesse fonti di dati ma modifica il tono, lo stile o il contenuto co
                     final_response="Errore di sistema. Controllare i log.",
                     tool_calls=self.tool_calls_log
                 )
+
+    def _build_task_input(self, ticket: Ticket, image_base64: Optional[str] = None, regeneration_feedback: Optional[str] = None) -> str:
+        """Build the task input string for the agent"""
+        task_input = f"""TICKET DA GESTIRE:
+Oggetto: {ticket.subject}
+Messaggio: {ticket.message}
+
+ISTRUZIONI:
+1. CHIAMA sql_expert per cercare dati rilevanti nel database
+2. CHIAMA history_expert per consultare manuali E ticket passati
+3. Sintetizza tutto in una risposta JSON"""
+
+        if image_base64:
+            task_input += "\n\n[Immagine allegata - analizzala per valutazione danni]"
+        
+        if regeneration_feedback:
+            task_input += f"""
+
+⚠️ FEEDBACK UTENTE PER RIGENERAZIONE:
+{regeneration_feedback}
+
+IMPORTANTE: Rigenera la risposta tenendo conto di questo feedback specifico.
+Mantieni le stesse fonti di dati ma modifica il tono, lo stile o il contenuto come richiesto."""
+        
+        return task_input
+
+    async def generate_response_stream(self, ticket: Ticket, image_base64: Optional[str] = None, regeneration_feedback: Optional[str] = None):
+        """
+        Async generator that yields SSE events as tools execute.
+        Uses a queue-based approach with threading for true real-time streaming.
+        """
+        import asyncio
+        import threading
+        from queue import Queue
+        import time
+        
+        # Reset tool calls log
+        self.tool_calls_log = []
+        
+        # Queue for streaming events
+        event_queue = Queue()
+        self._event_queue = event_queue  # Enable tool wrappers to push directly
+        
+        # Build task input
+        task_input = self._build_task_input(ticket, image_base64, regeneration_feedback)
+        
+        print("\n" + "="*60)
+        print("🏢 UFFICIO RECLAMI AI - Streaming Request")
+        print("="*60)
+        
+        def run_agent():
+            """Run agent in background thread, push events to queue"""
+            try:
+                # Use stream_invoke for step-by-step execution
+                step_index = 0
+                accumulated_text = ""
+                
+                for step in self.master_agent.stream_invoke(task_input):
+                    step_index += 1
+                    print(f"\n📍 Step {step_index}")
+                    
+                    # Push step info event
+                    event_queue.put({
+                        "type": "step",
+                        "step": step_index,
+                        "message": f"Step {step_index} in corso..."
+                    })
+                    
+                    # NOTE: tool_start and tool_complete events are pushed directly 
+                    # by the tool wrapper functions via _push_event(), so we don't 
+                    # need to push them here again.
+                    
+                    # Check for text content (thoughts)
+                    if hasattr(step, 'text') and step.text:
+                        accumulated_text = step.text
+                        event_queue.put({
+                            "type": "thought",
+                            "content": step.text[:300],
+                            "step": step_index
+                        })
+                
+                # Parse final response
+                response_text = accumulated_text.replace("```json", "").replace("```", "").strip()
+                
+                try:
+                    # Use Structured Response for robust parsing of the accumulated stream
+                    parsing_instruction = f"""
+                    You are a JSON parser. 
+                    Extract the operational response from the following text and format it strictly according to the schema.
+                    Ignore any conversational filler before or after the JSON.
+                    
+                    IMPORTANT: You MUST populate 'action_checklist' with specific actionable steps inferred from the text if they are not explicitly listed.
+                    
+                    TEXT TO PARSE:
+                    {response_text}
+                    """
+                    
+                    structured_result = self.client.structured_response(
+                        input=parsing_instruction,
+                        output_cls=OpsResponse
+                    )
+                    
+                    ops_data = structured_result.structured_data[0]
+                    
+                    event_queue.put({
+                        "type": "complete",
+                        "response": {
+                            "suggested_response": ops_data.final_response,
+                            "thought_process": ops_data.thought_process,
+                            "sql_query_used": ops_data.sql_query_used,
+                            "action_checklist": ops_data.action_checklist,
+                            "coal_alert": ops_data.coal_alert
+                        }
+                    })
+
+                except Exception as parse_error:
+                    print(f"⚠️ Structured Response Failed (Stream): {parse_error}")
+                    # Fallback to regex
+                    import re
+                    json_str = response_text
+                    
+                    match = re.search(r'```json\s*(\{.*?\})\s*```', response_text, re.DOTALL)
+                    if match:
+                        json_str = match.group(1)
+                    else:
+                        match = re.search(r'\{.*\}', response_text, re.DOTALL)
+                        if match:
+                            json_str = match.group(0)
+                    
+                    data = json.loads(json_str) 
+                    event_queue.put({
+                        "type": "complete",
+                        "response": {
+                            "suggested_response": data.get("final_response", response_text),
+                            "thought_process": data.get("thought_process", ""),
+                            "sql_query_used": data.get("sql_query_used", "N/A"),
+                            "action_checklist": data.get("action_checklist", []),
+                            "coal_alert": data.get("coal_alert", False)
+                        }
+                    })
+                except Exception as parse_error:
+                    print(f"⚠️ JSON Parse Error: {parse_error}")
+                    event_queue.put({
+                        "type": "complete",
+                        "response": {
+                            "suggested_response": response_text or "Errore nel parsing",
+                            "thought_process": "Parsing failed",
+                            "sql_query_used": "N/A",
+                            "action_checklist": ["Review logs"],
+                            "coal_alert": False
+                        }
+                    })
+                    
+            except Exception as e:
+                print(f"❌ Agent Error: {e}")
+                event_queue.put({"type": "error", "message": str(e)})
+            finally:
+                event_queue.put(None)  # Signal completion
+        
+        # Yield initial connection event
+        yield {"type": "connected", "message": "Connessione al Polo Nord stabilita"}
+        
+        # Start agent in background thread
+        agent_thread = threading.Thread(target=run_agent, daemon=True)
+        agent_thread.start()
+        
+        # Stream events from queue
+        loop = asyncio.get_event_loop()
+        while True:
+            # Non-blocking queue get using run_in_executor
+            event = await loop.run_in_executor(None, lambda: event_queue.get(timeout=60))
+            
+            if event is None:  # Completion signal
+                break
+                
+            yield event
+            await asyncio.sleep(0.05)  # Small delay for smoother streaming
+        
+        # Cleanup
+        self._event_queue = None
 
     def index_manuals(self, knowledge_base_path: str = "data/knowledge_base"):
         """Index all .txt files from knowledge_base folder into vector store"""

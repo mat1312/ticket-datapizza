@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from datetime import datetime
 import os
+import json
 from dotenv import load_dotenv
 
 from models import (
@@ -70,58 +71,58 @@ async def get_example_tickets():
     example_tickets = [
         Ticket(
             id="NP-2025-001",
-            category="IT Support",
-            priority="high",
-            subject="VPN Polare non funziona - Urgente!",
-            message="Sono l'elfo Sparkle del reparto Confezionamento. Da stamattina non riesco ad accedere alla VPN aziendale. Inserisco le mie credenziali ELF-7842 ma ricevo errore 'Autenticazione Fallita'. Ho già provato a riavviare il computer e verificare la connessione. Ho urgente bisogno di accedere al Database Regali per completare gli ordini del settore Europa che hanno deadline oggi! Il mio Fiocco di Neve Token sembra funzionare. Aiutatemi!",
+            category="Reclamo Regalo",
+            priority="critical",
+            subject="MIO FIGLIO HA RICEVUTO CARBONE - VERGOGNA!",
+            message="Buongiorno, sono Maria Rossi, la madre di Tommy (child_id: CH-8847). Stamattina mio figlio ha aperto il pacco e invece della PlayStation 5 che aveva chiesto c'era un pezzo di CARBONE. Tommy ha pianto per due ore! È stato bravissimo tutto l'anno: fa i compiti, aiuta in casa, è gentile con la sorellina. Non capisco questo errore IMPERDONABILE. Siamo clienti fedeli da 5 anni e questo è il trattamento che riceviamo? Voglio spiegazioni IMMEDIATE e il regalo corretto consegnato entro oggi, altrimenti contatterò tutti i giornali. Non scherzate con me.",
             created_at=datetime.now()
         ),
         Ticket(
             id="NP-2025-002",
-            category="HR Elfi",
-            priority="medium",
-            subject="Richiesta ferie post-Natale",
-            message="Salve, sono Jingle del reparto Verniciatura Giocattoli. Dopo la maratona natalizia vorrei richiedere 2 settimane di ferie dal 2 al 16 Gennaio per recuperare le energie. È la mia prima richiesta di ferie lunghe e non conosco la procedura. Quali documenti devo preparare? Devo far firmare qualcuno? Inoltre, dato che ho fatto 847 ore di straordinario a Dicembre, volevo sapere se ho diritto a qualche bonus extra. Grazie!",
+            category="Regalo Sbagliato",
+            priority="high",
+            subject="Regalo completamente sbagliato per mia figlia",
+            message="Salve, mi chiamo Giulia Bianchi e scrivo per mia figlia Sofia di 8 anni. Sofia aveva chiesto una Barbie Dreamhouse e invece ha ricevuto... un set di attrezzi da meccanico?! Mia figlia è devastata, era il regalo che sognava da mesi. Ho le prove della letterina che abbiamo spedito insieme. Come è possibile un errore del genere? Potete sistemare questa situazione? Sofia non smette di piangere.",
             created_at=datetime.now()
         ),
         Ticket(
             id="NP-2025-003",
-            category="Customer Service",
+            category="Mancata Consegna",
             priority="critical",
-            subject="Genitore furioso - bambino nella Naughty List",
-            message="URGENTE! Ho una madre al telefono furiosa perché suo figlio Tommy (child_id: CH-8847) ha ricevuto carbone invece del PlayStation richiesto. Sostiene che il bambino è stato bravissimo tutto l'anno e minaccia di contattare i media. Ho controllato nel database e il naughty_score è 73. La signora è cliente premium con 5 ordini negli ultimi 3 anni. Come devo gestire la situazione? Posso offrire compensazioni? Devo escalare a Mrs. Claus?",
+            subject="Babbo Natale NON è passato - Emergenza!",
+            message="Sono Francesco Verdi, padre di due gemelli di 6 anni (Marco e Luca). Stamattina sotto l'albero NON C'ERA NIENTE. I bambini sono traumatizzati, pensano di essere stati cattivi. Abbiamo controllato: camino pulito, biscotti e latte pronti, letterine inviate a Novembre. I nostri figli sono nella lista 'nice', ho verificato io stesso! Come è possibile che ci abbiate SALTATI? Pretendo una risposta e una soluzione OGGI. I miei figli stanno piangendo disperatamente.",
             created_at=datetime.now()
         ),
         Ticket(
             id="NP-2025-004",
-            category="Manutenzione Slitta",
-            priority="critical",
-            subject="EMERGENZA - Motore slitta surriscaldato!",
-            message="MAYDAY MAYDAY! Sono il co-pilota Blitzen Jr. Siamo sopra la Germania e il motore plasma ha raggiunto 5200K! Gli iniettori sembrano intasati e stiamo perdendo quota. Abbiamo ancora 2000 consegne da fare in Europa. Qual è la procedura di emergenza? Dobbiamo attivare il raffreddamento d'emergenza? C'è un punto di atterraggio sicuro nelle vicinanze? Il codice errore sullo schermo è AG-500!",
+            category="Naughty Score Contestato",
+            priority="high",
+            subject="Contestazione punteggio 'cattivo' di Pierre",
+            message="Bonjour, sono Isabelle Méchant da Lyon. Ho ricevuto una notifica che mio figlio Pierre ha un 'naughty_score' di 78 e riceverà carbone. Questo è INACCETTABILE! Pierre ha fatto UNA marachella tutto l'anno (ha rotto un vaso per sbaglio!) e voi lo condannate così? I suoi compagni di classe che fanno i bulli hanno ricevuto regali normalmente! Voglio sapere ESATTAMENTE cosa risulta nel vostro database e chi ha deciso questo punteggio assurdo. Attendo risposta urgente.",
             created_at=datetime.now()
         ),
         Ticket(
             id="NP-2025-005",
-            category="Database Query",
-            priority="high",
-            subject="Verifica bambino Pierre Méchant - possibile errore naughty score",
-            message="Ciao! Ho ricevuto una lamentela dalla famiglia Méchant di Lyon riguardo al loro figlio Pierre. Dicono che il suo naughty_score è troppo alto e vogliono sapere il motivo esatto. Puoi verificare nel database children_log qual è il suo score attuale e qual è stato l'ultimo incidente registrato? Dobbiamo rispondere ai genitori con dati precisi.",
+            category="Regalo Danneggiato",
+            priority="medium",
+            subject="LEGO arrivato in mille pezzi - pacco distrutto",
+            message="Salve, sono Andrea Neri. Il regalo per mio figlio Matteo (LEGO Star Wars Ultimate Collector) è arrivato con la scatola completamente DISTRUTTA. Matteo ha 10 anni e colleziona LEGO da quando ne aveva 5, questo era il pezzo forte della sua collezione. Mancano pezzi ovunque, il libretto istruzioni è strappato. 300 euro di regalo rovinato! Le renne hanno usato il pacco come palla da calcio? Voglio un rimborso o una sostituzione.",
             created_at=datetime.now()
         ),
         Ticket(
             id="NP-2025-006",
-            category="Inventory Check",
+            category="Richiesta Speciale",
             priority="medium",
-            subject="Controllo stock PlayStation 5 e Xbox",
-            message="Urgente! Ho bisogno di sapere quante PlayStation 5 e Xbox Series X abbiamo in magazzino. Molti bambini le hanno richieste ma temo che siamo in shortage. Controlla anche in quale settore del warehouse sono stoccate così posso mandare gli elfi a verificare. Se lo stock è basso, devo fare un ordine urgente!",
+            subject="Bambina malata - per favore aiutateci",
+            message="Gentile Babbo Natale, sono Elena Conti. Mia figlia Aurora di 7 anni è in ospedale da 3 mesi per una malattia seria. Il suo unico desiderio era un unicorno peluche gigante rosa, quello che canta. Il pacco è arrivato ma era VUOTO, solo carta da imballaggio. Aurora ha creduto di essere stata 'dimenticata' da Babbo Natale e questo le ha spezzato il cuore. Per favore, vi prego, potete rimediare? È l'unica cosa che la fa sorridere. Allego foto della letterina che ha scritto dall'ospedale.",
             created_at=datetime.now()
         ),
         Ticket(
             id="NP-2025-007",
-            category="Multi-Query",
+            category="Doppio Carbone",
             priority="critical",
-            subject="Report completo bambini Roma e Milano",
-            message="Per la riunione di domani con Mrs. Claus ho bisogno di un report completo. Quanti bambini abbiamo registrati nelle città di Rome e Milan? Qual è il loro status (APPROVED, PENDING, COAL)? E qual è la media del naughty_score per queste città? Questi dati sono fondamentali per la presentazione!",
+            subject="ENTRAMBI i miei figli hanno ricevuto carbone - ASSURDO",
+            message="INCREDIBILE! Sono Roberto Martini, padre di Emma (9 anni) e Giulio (7 anni). ENTRAMBI i miei figli hanno trovato carbone sotto l'albero. Emma ha voti perfetti a scuola, fa volontariato alla parrocchia! Giulio è il bambino più buono del quartiere, lo dicono tutti! Il vostro sistema è COMPLETAMENTE ROTTO. Voglio parlare con Mrs. Claus personalmente. Ho le pagelle, le lettere delle maestre, tutto quello che serve per dimostrare che i miei figli sono ANGEL. RISPONDETE SUBITO!",
             created_at=datetime.now()
         )
     ]
@@ -177,6 +178,41 @@ async def generate_response(request: GenerateResponseRequest):
             status_code=500,
             detail=f"Failed to generate response: {str(e)}"
         )
+
+@app.post("/api/tickets/generate-response-stream")
+async def generate_response_stream(request: GenerateResponseRequest):
+    """
+    SSE endpoint for real-time tool streaming.
+    Yields events as the agent executes tools.
+    """
+    if rag_engine is None:
+        raise HTTPException(
+            status_code=503,
+            detail="RAG engine not available"
+        )
+
+    async def event_generator():
+        try:
+            async for event in rag_engine.generate_response_stream(
+                ticket=request.ticket,
+                image_base64=request.image_base64,
+                regeneration_feedback=request.regeneration_feedback
+            ):
+                # Format as SSE: "data: {...}\n\n"
+                yield f"data: {json.dumps(event)}\n\n"
+        except Exception as e:
+            print(f"SSE Error: {e}")
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 @app.get("/")
 async def root():

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎅 Santa's Ops Console</title>
+    <title>🏢 Ufficio Reclami Polo Nord</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@400;600;700&display=swap"
@@ -227,6 +227,109 @@
             background: #22C55E;
         }
 
+        /* Logs Modal */
+        .logs-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .logs-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .logs-modal {
+            width: 90vw;
+            height: 85vh;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.95) 100%);
+            border: 2px solid rgba(34, 197, 94, 0.4);
+            border-radius: 24px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(34, 197, 94, 0.15);
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .logs-modal-overlay.active .logs-modal {
+            transform: scale(1);
+        }
+
+        .logs-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 28px;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.3);
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.1) 0%, transparent 100%);
+        }
+
+        .logs-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #22C55E;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logs-modal-close {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #EF4444;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logs-modal-close:hover {
+            background: rgba(239, 68, 68, 0.4);
+            transform: scale(1.05);
+        }
+
+        .logs-modal-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .expand-logs-btn {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(22, 163, 74, 0.2) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+            color: #22C55E;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .expand-logs-btn:hover {
+            background: rgba(34, 197, 94, 0.3);
+            transform: translateY(-1px);
+        }
+
         @keyframes pulse {
 
             0%,
@@ -318,6 +421,128 @@
             scrollbar-width: thin;
             scrollbar-color: #334155 transparent;
         }
+
+        /* ============================================
+           🎄 PREMIUM CUSTOM SCROLLBARS 🎄
+           ============================================ */
+
+        /* Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(34, 197, 94, 0.5) rgba(15, 23, 42, 0.3);
+        }
+
+        /* Webkit browsers (Chrome, Safari, Edge) */
+        *::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        *::-webkit-scrollbar-track {
+            background: linear-gradient(to right, rgba(15, 23, 42, 0.3), rgba(30, 41, 59, 0.2));
+            border-radius: 10px;
+            margin: 4px;
+        }
+
+        *::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg,
+                    rgba(34, 197, 94, 0.6) 0%,
+                    rgba(22, 163, 74, 0.4) 50%,
+                    rgba(250, 204, 21, 0.5) 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(15, 23, 42, 0.4);
+            box-shadow:
+                0 0 10px rgba(34, 197, 94, 0.3),
+                inset 0 0 6px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        *::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg,
+                    rgba(34, 197, 94, 0.9) 0%,
+                    rgba(250, 204, 21, 0.8) 50%,
+                    rgba(239, 68, 68, 0.7) 100%);
+            box-shadow:
+                0 0 20px rgba(250, 204, 21, 0.6),
+                0 0 30px rgba(34, 197, 94, 0.4),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+            border-color: rgba(250, 204, 21, 0.3);
+            transform: scaleX(1.1);
+        }
+
+        *::-webkit-scrollbar-thumb:active {
+            background: linear-gradient(135deg,
+                    rgba(239, 68, 68, 0.9) 0%,
+                    rgba(220, 38, 38, 0.8) 100%);
+            box-shadow:
+                0 0 25px rgba(239, 68, 68, 0.8),
+                inset 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Corner (when both scrollbars exist) */
+        *::-webkit-scrollbar-corner {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 4px;
+        }
+
+        /* Custom class for darker scrollbars (terminal, modals) */
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(10, 10, 10, 0.3));
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg,
+                    rgba(34, 197, 94, 0.7) 0%,
+                    rgba(59, 130, 246, 0.5) 100%);
+            box-shadow:
+                0 0 15px rgba(34, 197, 94, 0.5),
+                0 0 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg,
+                    rgba(34, 197, 94, 1) 0%,
+                    rgba(59, 130, 246, 0.8) 50%,
+                    rgba(250, 204, 21, 0.9) 100%);
+            box-shadow:
+                0 0 25px rgba(34, 197, 94, 0.8),
+                0 0 15px rgba(250, 204, 21, 0.6);
+        }
+
+        /* Sidebar specific scrollbar (red theme) */
+        .sidebar::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg,
+                    rgba(220, 38, 38, 0.6) 0%,
+                    rgba(239, 68, 68, 0.5) 100%);
+            box-shadow:
+                0 0 10px rgba(220, 38, 38, 0.4),
+                inset 0 0 6px rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg,
+                    rgba(220, 38, 38, 0.9) 0%,
+                    rgba(250, 204, 21, 0.8) 100%);
+            box-shadow:
+                0 0 20px rgba(220, 38, 38, 0.7),
+                0 0 15px rgba(250, 204, 21, 0.5);
+        }
+
+        /* Ticket list scrollbar (gold accent) */
+        #ticketsList::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg,
+                    rgba(250, 204, 21, 0.6) 0%,
+                    rgba(34, 197, 94, 0.5) 100%);
+        }
+
+        #ticketsList::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg,
+                    rgba(250, 204, 21, 0.9) 0%,
+                    rgba(34, 197, 94, 0.8) 100%);
+            box-shadow:
+                0 0 20px rgba(250, 204, 21, 0.8),
+                0 0 15px rgba(34, 197, 94, 0.5);
+        }
     </style>
 </head>
 
@@ -338,10 +563,10 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <span class="text-4xl">🎅</span>
+                <span class="text-4xl">🏢</span>
                 <div>
                     <h1 class="text-2xl font-bold text-white leading-none">
-                        Santa's <span class="text-red-500">Ops</span> Console
+                        Ufficio <span class="text-red-500">Reclami</span> Polo Nord
                     </h1>
                 </div>
             </div>
@@ -430,34 +655,57 @@
 
                     <button id="generateBtn" onclick="generateResponse()"
                         class="w-full magic-button text-white py-4 px-6 flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-[0.99]">
-                        <span class="text-2xl">🎄</span>
-                        <span>Chiedi a Santa AI</span>
-                        <span class="text-2xl">🎄</span>
+                        <span class="text-2xl">📋</span>
+                        <span>Elabora Reclamo</span>
+                        <span class="text-2xl">📋</span>
                     </button>
                 </div>
 
                 <!-- Placeholder when no ticket selected -->
                 <div id="emptyState" class="flex flex-col items-center justify-center h-[50vh] text-slate-500">
-                    <div class="text-6xl mb-4 opacity-50">🎅</div>
-                    <h3 class="text-xl font-bold text-slate-400">Seleziona una richiesta dalla lista</h3>
-                    <p class="text-sm opacity-60">Il postino ha appena consegnato la posta!</p>
+                    <div class="text-6xl mb-4 opacity-50">📬</div>
+                    <h3 class="text-xl font-bold text-slate-400">Seleziona un reclamo dalla lista</h3>
+                    <p class="text-sm opacity-60">I genitori non scherzano quest'anno!</p>
                 </div>
 
                 <!-- Terminal / Tool Calls -->
                 <div id="terminalOutput" class="hidden magic-terminal p-4 shadow-xl">
-                    <div class="flex items-center gap-2 text-green-400 text-sm mb-3 pb-2 border-b border-green-900/50 cursor-pointer hover:bg-slate-800/50 rounded-lg px-2 py-1 -mx-2 transition-colors"
-                        onclick="toggleTerminalLogs()">
-                        <span class="animate-pulse">🟢</span>
-                        <span class="font-bold font-mono">SYSTEM LOGS</span>
-                        <div class="ml-auto flex gap-2 text-xs opacity-70">
-                            <span>MEM: 64TB</span>
-                            <span>CPU: 99%</span>
-                            <span id="terminalToggleIcon">▼</span>
+                    <div class="flex items-center gap-2 text-green-400 text-sm mb-3 pb-2 border-b border-green-900/50">
+                        <div class="flex items-center gap-2 cursor-pointer hover:bg-slate-800/50 rounded-lg px-2 py-1 transition-colors flex-1"
+                            onclick="toggleTerminalLogs()">
+                            <span class="animate-pulse">🟢</span>
+                            <span class="font-bold font-mono">SYSTEM LOGS</span>
+                            <div class="ml-auto flex gap-2 text-xs opacity-70">
+                                <span>MEM: 64TB</span>
+                                <span>CPU: 99%</span>
+                                <span id="terminalToggleIcon">▼</span>
+                            </div>
                         </div>
+                        <button onclick="openLogsModal()" class="expand-logs-btn" title="Espandi a tutto schermo">
+                            <span>📺</span>
+                            <span>Espandi</span>
+                        </button>
                     </div>
                     <div id="terminalLogs"
                         class="space-y-2 max-h-96 overflow-y-auto custom-scrollbar font-mono text-sm hidden">
                         <!-- Logs -->
+                    </div>
+                </div>
+
+                <!-- Fullscreen Logs Modal -->
+                <div id="logsModalOverlay" class="logs-modal-overlay" onclick="closeLogsModal(event)">
+                    <div class="logs-modal" onclick="event.stopPropagation()">
+                        <div class="logs-modal-header">
+                            <div class="logs-modal-title">
+                                <span class="text-3xl">🎅</span>
+                                <span>Registro Elaborazione Reclami</span>
+                                <span class="text-3xl">🔧</span>
+                            </div>
+                            <button class="logs-modal-close" onclick="closeLogsModal()">✕</button>
+                        </div>
+                        <div id="logsModalContent" class="logs-modal-content custom-scrollbar font-mono">
+                            <!-- Logs will be cloned here -->
+                        </div>
                     </div>
                 </div>
 
@@ -664,6 +912,91 @@
             section.classList.toggle('hidden');
         }
 
+        // Open fullscreen logs modal
+        function openLogsModal() {
+            const overlay = document.getElementById('logsModalOverlay');
+            const modalContent = document.getElementById('logsModalContent');
+            const terminalLogs = document.getElementById('terminalLogs');
+
+            // Clone the current logs content to modal
+            modalContent.innerHTML = terminalLogs.innerHTML;
+            modalContent.scrollTop = modalContent.scrollHeight;
+
+            // Show modal
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Use MutationObserver for smooth live sync - ONLY direct children
+            // Use MutationObserver for smooth live sync
+            window.logsModalObserver = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    // Handle new nodes (additions) - ONLY for direct children of terminalLogs
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0 && mutation.target === terminalLogs) {
+                        mutation.addedNodes.forEach((node) => {
+                            if (node.nodeType === Node.ELEMENT_NODE) {
+                                // Check if this node already exists in modal
+                                const existingIds = [...modalContent.querySelectorAll('[id]')].map(el => el.id);
+                                if (node.id && existingIds.includes(node.id)) return;
+
+                                // Clone and append
+                                const clone = node.cloneNode(true);
+                                modalContent.appendChild(clone);
+                                modalContent.scrollTo({ top: modalContent.scrollHeight, behavior: 'smooth' });
+                            }
+                        });
+                    }
+
+                    // Handle updates to existing nodes (subtree changes)
+                    // We simply find the closest parent with an ID in the source, and re-sync it in the modal
+                    let target = mutation.target;
+                    while (target && target !== terminalLogs && !target.id) {
+                        target = target.parentElement;
+                    }
+
+                    if (target && target.id && target !== terminalLogs) {
+                        const modalNode = modalContent.querySelector(`[id="${target.id}"]`);
+                        if (modalNode) {
+                            // Sync content by replacing innerHTML
+                            // This is safe because we just want a visual mirror
+                            if (modalNode.innerHTML !== target.innerHTML || modalNode.className !== target.className) {
+                                modalNode.className = target.className;
+                                modalNode.innerHTML = target.innerHTML;
+                            }
+                        }
+                    }
+                });
+            });
+
+            // Observe subtree to catch updates inside cards
+            window.logsModalObserver.observe(terminalLogs, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                characterData: true
+            });
+        }
+
+        // Close fullscreen logs modal
+        function closeLogsModal(event) {
+            // If called with event, check if clicking overlay (not modal)
+            if (event && event.target !== event.currentTarget) return;
+
+            const overlay = document.getElementById('logsModalOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+
+            // Disconnect the observer
+            if (window.logsModalObserver) {
+                window.logsModalObserver.disconnect();
+                window.logsModalObserver = null;
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLogsModal();
+        });
+
         // Send response (placeholder for now)
         function sendResponse() {
             alert('✅ Risposta inviata! (Funzionalità placeholder)');
@@ -694,6 +1027,146 @@
             });
         }
 
+        // Handle SSE streaming events
+        let logCounter = 0;  // Global counter for ALL unique log element IDs
+        let pendingTools = {};  // Map tool_name to array of pending card IDs
+
+        function handleStreamEvent(data, logsEl) {
+            logCounter++;
+            const logId = `log-${logCounter}`;
+
+            const escapeHtml = (text) => {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
+
+            switch (data.type) {
+                case 'connected':
+                    // Reset on new connection (but keep logCounter for uniqueness)
+                    pendingTools = {};
+                    logsEl.innerHTML += `
+                        <div class="terminal-line text-green-400 flex items-center gap-2" id="${logId}">
+                            <span>🔌</span> ${escapeHtml(data.message)}
+                        </div>
+                    `;
+                    break;
+
+                case 'tool_start':
+                    const toolEmoji = data.tool_name.includes('sql') || data.tool_name.includes('SQL') ? '🗄️' :
+                        data.tool_name.includes('schema') ? '📋' :
+                            data.tool_name.includes('knowledge') || data.tool_name.includes('manual') ? '📚' :
+                                data.tool_name.includes('ticket') ? '🎫' : '⚙️';
+
+                    // Track this pending tool
+                    if (!pendingTools[data.tool_name]) {
+                        pendingTools[data.tool_name] = [];
+                    }
+                    pendingTools[data.tool_name].push(logId);
+
+                    logsEl.innerHTML += `
+                        <div class="tool-card bg-slate-800/80 rounded-xl p-4 mt-3 border border-yellow-500/50" id="${logId}" data-tool-name="${escapeHtml(data.tool_name)}">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="flex items-center gap-2 text-white font-bold">
+                                    <span class="text-xl">${toolEmoji}</span>
+                                    ${escapeHtml(data.tool_name)}
+                                </span>
+                                <span class="tool-status text-yellow-400 font-semibold animate-pulse">⏳ In corso...</span>
+                            </div>
+                            <div class="text-sm">
+                                <span class="text-slate-400">Input:</span>
+                                <code class="ml-2 bg-slate-900 px-2 py-1 rounded text-blue-300">${escapeHtml(data.tool_input)}</code>
+                            </div>
+                        </div>
+                    `;
+                    break;
+
+                case 'tool_complete':
+                    const statusColor = data.status === 'success' ? 'text-green-400' : 'text-red-400';
+                    const statusIcon = data.status === 'success' ? '✅' : '❌';
+                    const borderColor = data.status === 'success' ? 'border-green-500/50' : 'border-red-500/50';
+
+                    // Find the first pending card for this tool
+                    let cardId = null;
+                    if (pendingTools[data.tool_name] && pendingTools[data.tool_name].length > 0) {
+                        cardId = pendingTools[data.tool_name].shift();
+                    }
+
+                    const existingCard = cardId ? document.getElementById(cardId) : null;
+
+                    if (existingCard) {
+                        // Update existing card
+                        existingCard.classList.remove('border-yellow-500/50');
+                        existingCard.classList.add(borderColor);
+                        const statusSpan = existingCard.querySelector('.tool-status');
+                        if (statusSpan) {
+                            statusSpan.className = `tool-status ${statusColor} font-semibold`;
+                            statusSpan.innerHTML = statusIcon;
+                        }
+
+                        // Add output
+                        const outputDiv = document.createElement('div');
+                        outputDiv.className = 'text-sm mt-2';
+                        outputDiv.innerHTML = `
+                            <span class="text-slate-400">Output:</span>
+                            <pre class="mt-1 bg-slate-900 p-2 rounded text-green-300 text-xs overflow-x-auto max-h-24">${escapeHtml(data.tool_output)}</pre>
+                        `;
+                        existingCard.appendChild(outputDiv);
+                    } else {
+                        // Fallback: Create new complete card
+                        const completeEmoji = data.tool_name.includes('sql') ? '🗄️' : data.tool_name.includes('schema') ? '📋' : '📚';
+                        logsEl.innerHTML += `
+                            <div class="tool-card bg-slate-800/80 rounded-xl p-4 mt-3 border ${borderColor}">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="flex items-center gap-2 text-white font-bold">
+                                        <span class="text-xl">${completeEmoji}</span>
+                                        ${escapeHtml(data.tool_name)}
+                                    </span>
+                                    <span class="${statusColor} font-semibold">${statusIcon}</span>
+                                </div>
+                                <div class="text-sm mb-2">
+                                    <span class="text-slate-400">Input:</span>
+                                    <code class="ml-2 bg-slate-900 px-2 py-1 rounded text-blue-300">${escapeHtml(data.tool_input)}</code>
+                                </div>
+                                <div class="text-sm">
+                                    <span class="text-slate-400">Output:</span>
+                                    <pre class="mt-1 bg-slate-900 p-2 rounded text-green-300 text-xs overflow-x-auto max-h-24">${escapeHtml(data.tool_output)}</pre>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    break;
+
+                case 'thought':
+                    logsEl.innerHTML += `
+                        <div class="terminal-line text-cyan-400 ml-4 text-sm flex items-center gap-2" id="${logId}">
+                            <span>🧠</span> ${escapeHtml(data.content.substring(0, 150))}...
+                        </div>
+                    `;
+                    break;
+
+                case 'step':
+                    logsEl.innerHTML += `
+                        <div class="terminal-line text-purple-400 text-sm flex items-center gap-2 mt-2" id="${logId}">
+                            <span>📍</span> ${escapeHtml(data.message)}
+                        </div>
+                    `;
+                    break;
+
+                case 'error':
+                    logsEl.innerHTML += `
+                        <div class="terminal-line text-red-400 mt-2 flex items-center gap-2" id="${logId}">
+                            <span>❌</span> Errore: ${escapeHtml(data.message)}
+                        </div>
+                    `;
+                    break;
+            }
+
+            // Auto-scroll
+            logsEl.scrollTop = logsEl.scrollHeight;
+        }
+
         async function generateResponse() {
             if (!currentTicket) return;
 
@@ -704,13 +1177,9 @@
             const terminal = document.getElementById('terminalOutput');
             const logs = document.getElementById('terminalLogs');
             terminal.classList.remove('hidden');
+            logs.classList.remove('hidden'); // Show logs by default for streaming
             logs.innerHTML = '';
-
-            await addLogWithDelay(logs, `
-                <div class="terminal-line text-green-400 flex items-center gap-2">
-                    <span>🔌</span> Connessione al Polo Nord...
-                </div>
-            `, 100);
+            document.getElementById('terminalToggleIcon').textContent = '▲';
 
             try {
                 const payload = {
@@ -718,103 +1187,85 @@
                     image_base64: selectedImageBase64 ? selectedImageBase64.split(',')[1] : null
                 };
 
-                const res = await fetch(`${API_BASE}/tickets/generate-response`, {
+                // Use streaming fetch for SSE
+                const response = await fetch(`${API_BASE}/tickets/generate-response-stream`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
-                const data = await res.json();
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
 
-                // Render Tool Calls with streaming effect
-                if (data.tool_calls && data.tool_calls.length > 0) {
-                    await addLogWithDelay(logs, `
-                        <div class="terminal-line text-yellow-400 font-bold mt-3 text-lg flex items-center gap-2">
-                            <span>🔧</span> Tool Eseguiti:
-                        </div>
-                    `, 300);
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let finalResponse = null;
 
-                    for (const tc of data.tool_calls) {
-                        const statusColor = tc.status === 'success' ? 'text-green-400' : 'text-red-400';
-                        const statusIcon = tc.status === 'success' ? '✅' : '❌';
-                        const toolEmoji = tc.tool_name === 'run_sql_query' ? '🗄️' :
-                            tc.tool_name === 'get_table_schema' ? '📋' :
-                                tc.tool_name === 'consult_manuals' ? '📚' : '⚙️';
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
 
-                        const escapeHtml = (text) => {
-                            if (!text) return '';
-                            const div = document.createElement('div');
-                            div.textContent = text;
-                            return div.innerHTML;
-                        };
+                    buffer += decoder.decode(value, { stream: true });
 
-                        await addLogWithDelay(logs, `
-                            <div class="tool-card bg-slate-800/80 rounded-xl p-4 mt-3 border border-slate-600">
-                                <div class="flex items-center justify-between mb-3">
-                                    <span class="flex items-center gap-2 text-white font-bold">
-                                        <span class="text-xl">${toolEmoji}</span>
-                                        ${tc.tool_name}
-                                    </span>
-                                    <span class="${statusColor} font-semibold">${statusIcon}</span>
-                                </div>
-                                <div class="text-sm mb-2">
-                                    <span class="text-slate-400">Input:</span>
-                                    <code class="ml-2 bg-slate-900 px-2 py-1 rounded text-blue-300">${escapeHtml(tc.tool_input)}</code>
-                                </div>
-            <div class="text-sm">
-                                    <span class="text-slate-400">Output:</span>
-                                    <pre class="mt-1 bg-slate-900 p-2 rounded text-green-300 text-xs overflow-x-auto max-h-24">${escapeHtml(tc.tool_output)}</pre>
-                                </div>
-                            </div>
-                        `, 400);
+                    // Parse SSE format: "data: {...}\n\n"
+                    const lines = buffer.split('\n\n');
+                    buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+                                handleStreamEvent(data, logs);
+
+                                if (data.type === 'complete') {
+                                    finalResponse = data.response;
+                                }
+                            } catch (parseErr) {
+                                console.warn('SSE parse error:', parseErr, line);
+                            }
+                        }
                     }
                 }
 
-                // Thought Process
-                await addLogWithDelay(logs, `
-                    <div class="terminal-line text-cyan-400 font-bold mt-4 flex items-center gap-2">
-                        <span>🧠</span> Analisi:
-                    </div>
-                `, 300);
+                // Handle final response
+                if (finalResponse) {
+                    document.getElementById('resultPanel').classList.remove('hidden');
 
-                const thoughts = data.thought_process.split('\n').filter(l => l.trim());
-                for (const line of thoughts.slice(0, 5)) {
-                    await addLogWithDelay(logs, `
-                        <div class="terminal-line text-slate-300 ml-6 text-sm">→ ${line}</div>
-                      `, 150);
-                }
+                    // Coal Alert
+                    if (finalResponse.coal_alert) {
+                        document.getElementById('coalAlert').classList.remove('hidden');
+                    } else {
+                        document.getElementById('coalAlert').classList.add('hidden');
+                    }
 
-                if (data.sql_query_used && data.sql_query_used !== "N/A") {
-                    await addLogWithDelay(logs, `
-                        <div class="terminal-line text-purple-400 mt-2 flex items-center gap-2">
-                            <span>🔍</span> SQL: <code class="text-white bg-purple-900/30 px-2 py-0.5 rounded ml-1">${data.sql_query_used}</code>
+                    // Action Checklist
+                    const checklist = document.getElementById('actionChecklist');
+                    checklist.innerHTML = '';
+                    (finalResponse.action_checklist || []).forEach(action => {
+                        const li = document.createElement('li');
+                        li.className = "flex items-start gap-3 text-slate-200";
+                        li.innerHTML = `
+                            <input type="checkbox" class="mt-1 w-5 h-5 accent-green-500 rounded">
+                            <span class="text-sm">${action}</span>
+                        `;
+                        checklist.appendChild(li);
+                    });
+
+                    // Final Response
+                    document.getElementById('finalResponse').innerText = finalResponse.suggested_response;
+
+                    // Add completion log
+                    logs.innerHTML += `
+                        <div class="terminal-line text-green-400 mt-4 flex items-center gap-2 font-bold">
+                            <span>✅</span> Analisi completata!
                         </div>
-                    `, 200);
-                }
-
-                // Coal Alert
-                if (data.coal_alert) {
-                    document.getElementById('coalAlert').classList.remove('hidden');
-                }
-
-                // Results
-                document.getElementById('resultPanel').classList.remove('hidden');
-
-                const checklist = document.getElementById('actionChecklist');
-                checklist.innerHTML = '';
-                data.action_checklist.forEach(action => {
-                    const li = document.createElement('li');
-                    li.className = "flex items-start gap-3 text-slate-200";
-                    li.innerHTML = `
-                        <input type="checkbox" class="mt-1 w-5 h-5 accent-green-500 rounded">
-                        <span class="text-sm">${action}</span>
                     `;
-                    checklist.appendChild(li);
-                });
-
-                document.getElementById('finalResponse').innerText = data.suggested_response;
+                }
 
             } catch (e) {
+                console.error('Streaming error:', e);
                 logs.innerHTML += `
                     <div class="terminal-line text-red-400 mt-2 flex items-center gap-2">
                         <span>❌</span> Errore: ${e.message}
