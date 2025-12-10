@@ -1,515 +1,932 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Ticket Assistant</title>
+    <title>🎅 Santa's Ops Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka:wght@400;600;700&display=swap"
+        rel="stylesheet">
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        :root {
+            --santa-red: #DC2626;
+            --santa-red-dark: #991B1B;
+            --xmas-green: #16A34A;
+            --xmas-green-dark: #166534;
+            --gold: #FACC15;
+            --snow: #F8FAFC;
+            --night: #1E293B;
+            --night-deep: #0F172A;
         }
-        .card-hover {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background: linear-gradient(180deg, #0F172A 0%, #1E3A5F 50%, #0F172A 100%);
+            min-height: 100vh;
         }
-        .card-hover:hover {
+
+        /* Snowfall */
+        .snowfall {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -20px;
+            color: white;
+            font-size: 1.2rem;
+            animation: snowfall linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes snowfall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        /* Christmas Lights */
+        .xmas-lights {
+            display: flex;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .light-bulb {
+            width: 12px;
+            height: 18px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: glow 1.5s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        .light-bulb::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: #555;
+            border-radius: 2px;
+        }
+
+        .light-bulb.red {
+            background: #EF4444;
+            box-shadow: 0 0 20px #EF4444, 0 0 40px #EF444480;
+        }
+
+        .light-bulb.green {
+            background: #22C55E;
+            box-shadow: 0 0 20px #22C55E, 0 0 40px #22C55E80;
+            animation-delay: 0.3s;
+        }
+
+        .light-bulb.gold {
+            background: #FACC15;
+            box-shadow: 0 0 20px #FACC15, 0 0 40px #FACC1580;
+            animation-delay: 0.6s;
+        }
+
+        .light-bulb.blue {
+            background: #3B82F6;
+            box-shadow: 0 0 20px #3B82F6, 0 0 40px #3B82F680;
+            animation-delay: 0.9s;
+        }
+
+        @keyframes glow {
+            0% {
+                opacity: 0.5;
+                filter: brightness(0.7);
+            }
+
+            100% {
+                opacity: 1;
+                filter: brightness(1.3);
+            }
+        }
+
+        /* Card Styles */
+        .gift-card {
+            background: linear-gradient(135deg, #FFFFFF10 0%, #FFFFFF05 100%);
+            border: 2px solid #FFFFFF20;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .gift-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            border-color: var(--gold);
+            box-shadow: 0 10px 40px rgba(250, 204, 21, 0.2);
+        }
+
+        /* Panel Styles */
+        .north-pole-panel {
+            background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+            border: 2px solid #334155;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Terminal */
+        .magic-terminal {
+            background: #0A0A0A;
+            border: 2px solid #22C55E40;
+            border-radius: 12px;
+            font-family: 'Comic Neue', monospace;
+        }
+
+        .terminal-line {
+            opacity: 0;
+            animation: typeIn 0.3s ease forwards;
+        }
+
+        @keyframes typeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Big Button */
+        .magic-button {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+            border-radius: 16px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .magic-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.6);
         }
-        .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
+
+        .magic-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        /* Coal Alert */
+        .coal-alert {
+            animation: gentle-shake 2s ease-in-out infinite;
+            background: linear-gradient(135deg, #92400E 0%, #78350F 100%);
+            border: 2px solid #F97316;
         }
-        .confidence-bar {
-            transition: width 0.5s ease-in-out;
+
+        @keyframes gentle-shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-2px);
+            }
+
+            75% {
+                transform: translateX(2px);
+            }
         }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
+
+        /* Priority Badges */
+        .badge-critical {
+            background: #EF4444;
+            animation: pulse 1s infinite;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .badge-high {
+            background: #F97316;
+        }
+
+        .badge-medium {
+            background: #22C55E;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Tool Card Animation */
+        .tool-card {
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sidebar & Layout */
+        .layout-container {
+            display: flex;
+            height: calc(100vh - 80px);
+            /* Adjust based on header height */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 350px;
+            background: rgba(15, 23, 42, 0.95);
+            border-right: 2px solid #334155;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 30;
+        }
+
+        .sidebar.collapsed {
+            width: 0;
+            border-right: none;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            position: relative;
+            background: rgba(15, 23, 42, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            z-index: 50;
+            background: var(--night-deep);
+            border: 2px solid #334155;
+            color: #fff;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-toggle-btn:hover {
+            background: #334155;
+            color: var(--gold);
+        }
+
+        /* Adjust scrollbar for sidebar */
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #334155 transparent;
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+
+<body class="text-white overflow-x-hidden">
+
+    <!-- Snowfall -->
+    <div class="snowfall" id="snowfall"></div>
+
     <!-- Header -->
-    <header class="gradient-bg text-white shadow-lg">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex items-center justify-between">
+    <header class="sticky top-0 z-40 bg-[#0F172A]/95 backdrop-blur-md border-b-2 border-[#334155] h-[80px]">
+        <div class=" px-4 h-full flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button id="toggleSidebar" class="p-2 hover:bg-slate-800 rounded-lg text-slate-300 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <span class="text-4xl">🎅</span>
                 <div>
-                    <h1 class="text-3xl font-bold">🤖 AI Ticket Assistant</h1>
-                    <p class="text-blue-100 mt-1">Assistenza intelligente per il customer service</p>
+                    <h1 class="text-2xl font-bold text-white leading-none">
+                        Santa's <span class="text-red-500">Ops</span> Console
+                    </h1>
                 </div>
-                <div class="text-right">
-                    <div class="text-sm text-blue-100">Powered by</div>
-                    <div class="text-lg font-semibold">DataPizza AI</div>
-                </div>
+            </div>
+
+            <div class="xmas-lights hidden md:flex">
+                <div class="light-bulb red"></div>
+                <div class="light-bulb green"></div>
+                <div class="light-bulb gold"></div>
+                <div class="light-bulb blue"></div>
+                <div class="light-bulb red"></div>
+                <div class="light-bulb green"></div>
+                <div class="light-bulb gold"></div>
+            </div>
+
+            <div class="flex items-center gap-3 text-sm">
+                <span class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-green-400 hidden sm:inline">Online</span>
+                </span>
+                <span class="text-slate-500 hidden sm:inline">|</span>
+                <span class="text-slate-400">🦌 Renne: Pronte</span>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Tickets List View -->
-        <div id="ticketsListView" class="space-y-6">
-            <div class="flex items-center justify-between">
-                <h2 class="text-2xl font-bold text-gray-800">Ticket Aperti</h2>
-                <div class="flex items-center space-x-2">
-                    <span class="text-sm text-gray-500">Aggiornato:</span>
-                    <span id="lastUpdate" class="text-sm font-medium text-gray-700"></span>
+    <div class="layout-container" id="layoutContainer">
+
+        <!-- SIDEBAR: Ticket List -->
+        <aside class="sidebar p-4" id="sidebar">
+            <div class="flex items-center gap-3 mb-6 px-2">
+                <span class="text-2xl">📬</span>
+                <h2 class="text-xl font-bold text-white">Richieste</h2>
+                <div class="ml-auto text-xs text-slate-400 font-mono bg-slate-800 px-2 py-1 rounded">INCOMING</div>
+            </div>
+
+            <div id="ticketsList" class="space-y-3 overflow-y-auto flex-1 custom-scrollbar pr-2">
+                <div class="text-slate-400 animate-pulse flex items-center gap-2 p-2">
+                    <span class="text-xl">❄️</span> Caricamento...
                 </div>
             </div>
 
-            <!-- Loading State -->
-            <div id="loadingTickets" class="flex items-center justify-center py-12">
-                <div class="loading-spinner"></div>
-                <span class="ml-3 text-gray-600">Caricamento ticket...</span>
+            <div class="mt-4 pt-4 border-t border-slate-700 text-center text-xs text-slate-500">
+                Santa's OS v24.12.25
             </div>
+        </aside>
 
-            <!-- Tickets Grid -->
-            <div id="ticketsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
-            </div>
-        </div>
+        <!-- MAIN: Content -->
+        <main class="main-content p-6 custom-scrollbar relative">
+            <div class="max-w-6xl mx-auto space-y-6">
 
-        <!-- Ticket Detail View -->
-        <div id="ticketDetailView" class="hidden">
-            <div class="flex items-center mb-6">
-                <button id="backToList" class="flex items-center text-blue-600 hover:text-blue-800 font-medium">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                    Torna alla lista
-                </button>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Ticket Details -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <div id="ticketDetails">
-                            <!-- Content filled by JavaScript -->
+                <!-- Active Ticket -->
+                <div id="activeTicketPanel" class="hidden north-pole-panel p-6 animate-fade-in">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl">🎫</span>
+                            <div>
+                                <h3 id="ticketSubject" class="text-xl font-bold text-white">Oggetto</h3>
+                                <div class="flex gap-3 text-sm text-slate-400 mt-1">
+                                    <span id="ticketId" class="font-mono text-cyan-400">ID: ---</span>
+                                    <span>•</span>
+                                    <span id="ticketSender">Categoria: ---</span>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="bg-slate-800/50 rounded-xl p-4 mb-6 border border-slate-700/50">
+                        <p id="ticketMessage" class="text-slate-200 leading-relaxed font-sans text-lg">
+                            Contenuto messaggio...
+                        </p>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-6 p-4 bg-slate-900/40 rounded-xl border border-dashed border-slate-600">
+                        <label
+                            class="flex items-center gap-2 text-sm font-semibold text-slate-300 mb-2 cursor-pointer hover:text-white transition-colors">
+                            <span>📎</span> <span>Allega Immagine (opzionale)</span>
+                        </label>
+                        <input type="file" id="imageInput" accept="image/*" class="block w-full text-sm text-slate-300
+                            file:mr-4 file:py-2 file:px-4
+                            file:rounded-xl file:border-0
+                            file:text-sm file:font-semibold
+                            file:bg-slate-700 file:text-white
+                            hover:file:bg-slate-600 cursor-pointer" />
+                    </div>
+
+                    <button id="generateBtn" onclick="generateResponse()"
+                        class="w-full magic-button text-white py-4 px-6 flex items-center justify-center gap-3 hover:scale-[1.01] active:scale-[0.99]">
+                        <span class="text-2xl">🎄</span>
+                        <span>Chiedi a Santa AI</span>
+                        <span class="text-2xl">🎄</span>
+                    </button>
+                </div>
+
+                <!-- Placeholder when no ticket selected -->
+                <div id="emptyState" class="flex flex-col items-center justify-center h-[50vh] text-slate-500">
+                    <div class="text-6xl mb-4 opacity-50">🎅</div>
+                    <h3 class="text-xl font-bold text-slate-400">Seleziona una richiesta dalla lista</h3>
+                    <p class="text-sm opacity-60">Il postino ha appena consegnato la posta!</p>
+                </div>
+
+                <!-- Terminal / Tool Calls -->
+                <div id="terminalOutput" class="hidden magic-terminal p-4 shadow-xl">
+                    <div class="flex items-center gap-2 text-green-400 text-sm mb-3 pb-2 border-b border-green-900/50 cursor-pointer hover:bg-slate-800/50 rounded-lg px-2 py-1 -mx-2 transition-colors"
+                        onclick="toggleTerminalLogs()">
+                        <span class="animate-pulse">🟢</span>
+                        <span class="font-bold font-mono">SYSTEM LOGS</span>
+                        <div class="ml-auto flex gap-2 text-xs opacity-70">
+                            <span>MEM: 64TB</span>
+                            <span>CPU: 99%</span>
+                            <span id="terminalToggleIcon">▼</span>
+                        </div>
+                    </div>
+                    <div id="terminalLogs"
+                        class="space-y-2 max-h-96 overflow-y-auto custom-scrollbar font-mono text-sm hidden">
+                        <!-- Logs -->
                     </div>
                 </div>
 
-                <!-- AI Assistant Panel -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-lg shadow-md">
-                        <!-- AI Assistant Header -->
-                        <div class="border-b border-gray-200 p-6">
-                            <h3 class="text-xl font-semibold text-gray-800 flex items-center">
-                                <span class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-                                    🤖
-                                </span>
-                                AI Assistant
-                            </h3>
-                            <p class="text-gray-600 mt-1">Genera una risposta intelligente basata sulla documentazione aziendale</p>
+                <!-- Results Panel -->
+                <div id="resultPanel" class="hidden space-y-6">
+
+                    <!-- Main Response Panel -->
+                    <div class="north-pole-panel p-6 border-l-4 border-l-yellow-500">
+                        <div class="flex items-center justify-between gap-4 mb-4 flex-wrap">
+                            <h4
+                                class="flex items-center gap-2 text-yellow-400 font-bold text-lg uppercase tracking-wider">
+                                <span class="text-2xl">💬</span> Risposta Suggerita
+                            </h4>
+                            <!-- Coal Alert (compact inline badge) -->
+                            <div id="coalAlert"
+                                class="hidden flex items-center gap-2 coal-alert rounded-xl px-4 py-2 text-center shadow-lg">
+                                <div class="text-xl">🪨</div>
+                                <div class="text-xs font-bold text-orange-400 uppercase">Lista Cattivi Rilevata!</div>
+                                <div class="text-xs text-orange-300">⚠️ Protocollo Carbone</div>
+                            </div>
+                        </div>
+                        <div class="bg-black/20 p-5 rounded-lg mb-4">
+                            <p id="finalResponse"
+                                class="text-slate-100 text-base leading-relaxed whitespace-pre-wrap font-sans"></p>
                         </div>
 
-                        <!-- AI Content -->
-                        <div class="p-6">
-                            <!-- Initial State -->
-                            <div id="aiInitialState" class="text-center py-12">
-                                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                </div>
-                                <h4 class="text-lg font-medium text-gray-800 mb-2">Pronto ad aiutarti!</h4>
-                                <p class="text-gray-600 mb-6">Clicca il pulsante per generare una risposta intelligente</p>
-                                <button id="generateResponseBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition-colors inline-flex items-center">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                    </svg>
-                                    Suggerisci Risposta con AI
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3 mb-4">
+                            <button onclick="sendResponse()"
+                                class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-lg">
+                                <span class="text-xl">✉️</span>
+                                <span>Invia Risposta</span>
+                            </button>
+                            <button onclick="toggleRegenerateInput()"
+                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-lg">
+                                <span class="text-xl">🔄</span>
+                                <span>Rigenera</span>
+                            </button>
+                        </div>
+
+                        <!-- Regenerate Feedback Section (hidden by default) -->
+                        <div id="regenerateSection"
+                            class="hidden bg-slate-900/50 p-4 rounded-lg border border-blue-500/30">
+                            <label class="block text-blue-300 font-semibold mb-2 text-sm">
+                                💡 Cosa non va? Fornisci istruzioni per rigenerare:
+                            </label>
+                            <textarea id="regenerateFeedback"
+                                class="w-full bg-slate-800 text-white border border-slate-600 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                                rows="3"
+                                placeholder="Es: Usa un tono più formale, aggiungi più dettagli tecnici, sii più conciso..."></textarea>
+                            <div class="flex gap-2 mt-3">
+                                <button onclick="regenerateWithFeedback()"
+                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all">
+                                    Rigenera con Feedback
+                                </button>
+                                <button onclick="toggleRegenerateInput()"
+                                    class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-semibold py-2 px-4 rounded-lg transition-all">
+                                    Annulla
                                 </button>
                             </div>
-
-                            <!-- Loading State -->
-                            <div id="aiLoadingState" class="text-center py-12 hidden">
-                                <div class="loading-spinner mx-auto mb-4"></div>
-                                <h4 class="text-lg font-medium text-gray-800 mb-2">AI sta analizzando...</h4>
-                                <p class="text-gray-600">Ricerca di documenti rilevanti e generazione della risposta</p>
-                            </div>
-
-                            <!-- AI Response -->
-                            <div id="aiResponseState" class="hidden fade-in">
-                                <!-- Response Editor -->
-                                <div class="mb-6">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <label class="block text-sm font-medium text-gray-700">Risposta Suggerita</label>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="text-sm text-gray-500">Tono:</span>
-                                            <select id="toneSelector" class="text-sm border border-gray-300 rounded px-2 py-1">
-                                                <option value="professional">Professionale</option>
-                                                <option value="friendly">Amichevole</option>
-                                                <option value="technical">Tecnico</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <textarea id="responseEditor" rows="8" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="La risposta AI apparirà qui..."></textarea>
-                                </div>
-
-                                <!-- Confidence Score -->
-                                <div class="mb-6">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <span class="text-sm font-medium text-gray-700">Affidabilità AI</span>
-                                        <span id="confidencePercentage" class="text-sm font-bold text-blue-600">0%</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div id="confidenceBar" class="confidence-bar h-2 rounded-full" style="width: 0%;"></div>
-                                    </div>
-                                    <p id="confidenceText" class="text-xs text-gray-500 mt-1"></p>
-                                </div>
-
-                                <!-- Sources -->
-                                <div class="mb-6">
-                                    <h5 class="text-sm font-medium text-gray-700 mb-3">Fonti Utilizzate</h5>
-                                    <div id="sourcesList" class="space-y-2">
-                                        <!-- Sources filled by JavaScript -->
-                                    </div>
-                                </div>
-
-                                <!-- Reasoning -->
-                                <div class="mb-6">
-                                    <h5 class="text-sm font-medium text-gray-700 mb-2">Ragionamento AI</h5>
-                                    <p id="reasoningText" class="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg"></p>
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="flex flex-wrap gap-3">
-                                    <button id="regenerateBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                        </svg>
-                                        Rigenera
-                                    </button>
-                                    <button id="sendResponseBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                                        </svg>
-                                        Invia Risposta
-                                    </button>
-                                    <button id="discardBtn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                        Scarta
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </main>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white rounded-lg p-6 max-w-md mx-4 fade-in">
-            <div class="text-center">
-                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
+                    <!-- Action Checklist (collapsible) -->
+                    <details class="north-pole-panel border-l-4 border-l-green-500">
+                        <summary class="cursor-pointer p-5 hover:bg-slate-800/50 rounded-t-lg transition-colors">
+                            <h4
+                                class="inline-flex items-center gap-2 text-green-400 font-bold uppercase tracking-wider">
+                                <span class="text-xl">✅</span> Azioni da Fare
+                            </h4>
+                        </summary>
+                        <div class="p-5 pt-0">
+                            <ul id="actionChecklist" class="space-y-3">
+                                <!-- Checkboxes -->
+                            </ul>
+                        </div>
+                    </details>
+
                 </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Risposta Inviata!</h3>
-                <p class="text-gray-600 mb-4">Il ticket è stato risolto con successo.</p>
-                <button id="closeSuccessModal" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
-                    Torna alla Lista
-                </button>
+
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        // Global state
-        let currentTicket = null;
-        let tickets = [];
-        const API_BASE = window.location.origin + '/api';
+        // Create snowflakes
+        function createSnow() {
+            const container = document.getElementById('snowfall');
+            const flakes = ['❄', '❅', '❆', '✻', '✼'];
 
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadTickets();
-            setupEventListeners();
-            updateTimestamp();
+            for (let i = 0; i < 40; i++) {
+                const flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+                flake.style.left = Math.random() * 100 + '%';
+                flake.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                flake.style.animationDelay = Math.random() * 8 + 's';
+                flake.style.fontSize = (Math.random() * 1 + 0.6) + 'rem';
+                flake.style.opacity = Math.random() * 0.5 + 0.3;
+                container.appendChild(flake);
+            }
+        }
+        const layoutContainer = document.getElementById('layoutContainer');
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggleSidebar');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
         });
 
-        // Setup event listeners
-        function setupEventListeners() {
-            document.getElementById('backToList').addEventListener('click', showTicketsList);
-            document.getElementById('generateResponseBtn').addEventListener('click', generateResponse);
-            document.getElementById('regenerateBtn').addEventListener('click', regenerateResponse);
-            document.getElementById('sendResponseBtn').addEventListener('click', sendResponse);
-            document.getElementById('discardBtn').addEventListener('click', discardResponse);
-            document.getElementById('closeSuccessModal').addEventListener('click', closeSuccessModal);
-            document.getElementById('toneSelector').addEventListener('change', regenerateResponse);
-        }
+        // Create snowflakes
 
-        // Load tickets from API
+        const API_BASE = window.location.origin + '/api';
+        let currentTicket = null;
+        let selectedImageBase64 = null;
+
+        document.getElementById('imageInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    selectedImageBase64 = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
         async function loadTickets() {
             try {
-                const response = await fetch(`${API_BASE}/tickets/examples`);
-                if (!response.ok) throw new Error('Failed to load tickets');
-
-                const data = await response.json();
-                tickets = data.tickets;
-
-                renderTickets();
-                document.getElementById('loadingTickets').classList.add('hidden');
-                document.getElementById('ticketsGrid').classList.remove('hidden');
-            } catch (error) {
-                console.error('Error loading tickets:', error);
-                showError('Errore nel caricamento dei ticket');
+                const res = await fetch(`${API_BASE}/tickets/examples`);
+                const data = await res.json();
+                renderTicketList(data.tickets);
+            } catch (e) {
+                console.error("Connessione fallita", e);
+                document.getElementById('ticketsList').innerHTML =
+                    '<div class="text-red-400">❌ Errore connessione</div>';
             }
         }
 
-        // Render tickets grid
-        function renderTickets() {
-            const grid = document.getElementById('ticketsGrid');
-            grid.innerHTML = '';
+        function renderTicketList(tickets) {
+            const container = document.getElementById('ticketsList');
+            container.innerHTML = '';
 
             tickets.forEach(ticket => {
-                const card = createTicketCard(ticket);
-                grid.appendChild(card);
+                const div = document.createElement('div');
+                div.className = 'gift-card p-4 cursor-pointer';
+                div.onclick = () => selectTicket(ticket);
+
+                const priorityBadge = getPriorityBadge(ticket.priority);
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-semibold text-slate-400">${ticket.id}</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold text-white ${priorityBadge.class}">${priorityBadge.label}</span>
+                    </div>
+                    <div class="font-bold text-white mb-1 truncate">${ticket.subject}</div>
+                    <div class="text-xs text-slate-400 truncate flex items-center gap-1">
+                        <span>📁</span> ${ticket.category}
+                    </div>
+                `;
+                container.appendChild(div);
             });
         }
 
-        // Create ticket card
-        function createTicketCard(ticket) {
-            const card = document.createElement('div');
-            card.className = 'bg-white rounded-lg shadow-md p-6 card-hover cursor-pointer';
-
-            const priorityColors = {
-                high: 'bg-red-100 text-red-800',
-                medium: 'bg-yellow-100 text-yellow-800',
-                low: 'bg-green-100 text-green-800'
-            };
-
-            const categoryColors = {
-                IT: 'bg-blue-100 text-blue-800',
-                HR: 'bg-purple-100 text-purple-800',
-                'Customer Service': 'bg-orange-100 text-orange-800'
-            };
-
-            card.innerHTML = `
-                <div class="flex items-start justify-between mb-3">
-                    <span class="text-sm font-medium text-gray-500">${ticket.id}</span>
-                    <span class="px-2 py-1 rounded-full text-xs font-medium ${priorityColors[ticket.priority] || 'bg-gray-100 text-gray-800'}">
-                        ${ticket.priority === 'high' ? 'Alta' : ticket.priority === 'medium' ? 'Media' : 'Bassa'}
-                    </span>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">${ticket.subject}</h3>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-3">${ticket.message.substring(0, 120)}...</p>
-                <div class="flex items-center justify-between">
-                    <span class="px-2 py-1 rounded-full text-xs font-medium ${categoryColors[ticket.category] || 'bg-gray-100 text-gray-800'}">
-                        ${ticket.category}
-                    </span>
-                    <span class="text-xs text-gray-500">2 ore fa</span>
-                </div>
-            `;
-
-            card.addEventListener('click', () => showTicketDetail(ticket));
-            return card;
+        function getPriorityBadge(p) {
+            if (p === 'critical') return { class: 'badge-critical', label: 'CRITICO' };
+            if (p === 'high') return { class: 'badge-high', label: 'ALTA' };
+            return { class: 'badge-medium', label: 'MEDIA' };
         }
 
-        // Show ticket detail
-        function showTicketDetail(ticket) {
+        function selectTicket(ticket) {
             currentTicket = ticket;
+            selectedImageBase64 = null;
+            document.getElementById('imageInput').value = "";
+            document.getElementById('activeTicketPanel').classList.remove('hidden');
+            document.getElementById('emptyState').classList.add('hidden'); // Hide placeholder
+            document.getElementById('ticketSubject').innerText = ticket.subject;
+            document.getElementById('ticketId').innerText = `ID: ${ticket.id}`;
+            document.getElementById('ticketSender').innerText = `Categoria: ${ticket.category}`;
+            document.getElementById('ticketMessage').innerText = ticket.message;
 
-            // Render ticket details
-            const detailsContainer = document.getElementById('ticketDetails');
-            detailsContainer.innerHTML = `
-                <div class="mb-4">
-                    <span class="text-sm font-medium text-gray-500">Ticket ID</span>
-                    <p class="text-lg font-semibold text-gray-800">${ticket.id}</p>
-                </div>
-                <div class="mb-4">
-                    <span class="text-sm font-medium text-gray-500">Oggetto</span>
-                    <p class="text-gray-800 font-medium">${ticket.subject}</p>
-                </div>
-                <div class="mb-4">
-                    <span class="text-sm font-medium text-gray-500">Categoria</span>
-                    <p class="text-gray-800">${ticket.category}</p>
-                </div>
-                <div class="mb-4">
-                    <span class="text-sm font-medium text-gray-500">Priorità</span>
-                    <p class="text-gray-800">${ticket.priority === 'high' ? 'Alta' : ticket.priority === 'medium' ? 'Media' : 'Bassa'}</p>
-                </div>
-                <div class="mb-4">
-                    <span class="text-sm font-medium text-gray-500">Messaggio</span>
-                    <div class="mt-2 p-3 bg-gray-50 rounded-lg">
-                        <p class="text-gray-800 text-sm leading-relaxed">${ticket.message}</p>
-                    </div>
-                </div>
-                <div>
-                    <span class="text-sm font-medium text-gray-500">Ricevuto</span>
-                    <p class="text-gray-800">2 ore fa</p>
-                </div>
-            `;
-
-            // Reset AI state
-            resetAIState();
-
-            // Show detail view
-            document.getElementById('ticketsListView').classList.add('hidden');
-            document.getElementById('ticketDetailView').classList.remove('hidden');
+            // Reset UI
+            document.getElementById('terminalOutput').classList.add('hidden');
+            document.getElementById('resultPanel').classList.add('hidden');
+            document.getElementById('coalAlert').classList.add('hidden');
+            document.getElementById('terminalLogs').innerHTML = '';
+            document.getElementById('terminalLogs').classList.add('hidden');
+            document.getElementById('terminalToggleIcon').textContent = '▼';
+            document.getElementById('regenerateSection').classList.add('hidden');
+            document.getElementById('regenerateFeedback').value = '';
         }
 
-        // Show tickets list
-        function showTicketsList() {
-            document.getElementById('ticketDetailView').classList.add('hidden');
-            document.getElementById('ticketsListView').classList.remove('hidden');
-            currentTicket = null;
+        // Toggle terminal logs visibility
+        function toggleTerminalLogs() {
+            const logs = document.getElementById('terminalLogs');
+            const icon = document.getElementById('terminalToggleIcon');
+            logs.classList.toggle('hidden');
+            icon.textContent = logs.classList.contains('hidden') ? '▼' : '▲';
         }
 
-        // Reset AI state
-        function resetAIState() {
-            document.getElementById('aiInitialState').classList.remove('hidden');
-            document.getElementById('aiLoadingState').classList.add('hidden');
-            document.getElementById('aiResponseState').classList.add('hidden');
+        // Toggle regenerate input section
+        function toggleRegenerateInput() {
+            const section = document.getElementById('regenerateSection');
+            section.classList.toggle('hidden');
         }
 
-        // Generate AI response
+        // Send response (placeholder for now)
+        function sendResponse() {
+            alert('✅ Risposta inviata! (Funzionalità placeholder)');
+            // TODO: Implement actual send functionality
+        }
+
+        // Regenerate with feedback (placeholder for now)
+        function regenerateWithFeedback() {
+            const feedback = document.getElementById('regenerateFeedback').value.trim();
+            if (!feedback) {
+                alert('⚠️ Per favore, fornisci delle istruzioni per la rigenerazione.');
+                return;
+            }
+            alert(`🔄 Rigenerazione con feedback: "${feedback}"\n\n(Backend da implementare)`);
+            // TODO: Call backend API with feedback to regenerate response
+            document.getElementById('regenerateFeedback').value = '';
+            toggleRegenerateInput();
+        }
+
+        // Simulate streaming with delay
+        function addLogWithDelay(logsEl, html, delay) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    logsEl.innerHTML += html;
+                    logsEl.parentElement.scrollTop = logsEl.parentElement.scrollHeight;
+                    resolve();
+                }, delay);
+            });
+        }
+
         async function generateResponse() {
             if (!currentTicket) return;
 
-            // Show loading state
-            document.getElementById('aiInitialState').classList.add('hidden');
-            document.getElementById('aiResponseState').classList.add('hidden');
-            document.getElementById('aiLoadingState').classList.remove('hidden');
+            const btn = document.getElementById('generateBtn');
+            btn.innerHTML = '<span class="animate-spin">🔄</span> Santa sta pensando...';
+            btn.disabled = true;
+
+            const terminal = document.getElementById('terminalOutput');
+            const logs = document.getElementById('terminalLogs');
+            terminal.classList.remove('hidden');
+            logs.innerHTML = '';
+
+            await addLogWithDelay(logs, `
+                <div class="terminal-line text-green-400 flex items-center gap-2">
+                    <span>🔌</span> Connessione al Polo Nord...
+                </div>
+            `, 100);
 
             try {
-                const tone = document.getElementById('toneSelector').value;
-                const response = await fetch(`${API_BASE}/tickets/generate-response`, {
+                const payload = {
+                    ticket: currentTicket,
+                    image_base64: selectedImageBase64 ? selectedImageBase64.split(',')[1] : null
+                };
+
+                const res = await fetch(`${API_BASE}/tickets/generate-response`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        ticket: currentTicket,
-                        tone: tone
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
 
-                if (!response.ok) throw new Error('Failed to generate response');
+                const data = await res.json();
 
-                const data = await response.json();
-                displayAIResponse(data);
+                // Render Tool Calls with streaming effect
+                if (data.tool_calls && data.tool_calls.length > 0) {
+                    await addLogWithDelay(logs, `
+                        <div class="terminal-line text-yellow-400 font-bold mt-3 text-lg flex items-center gap-2">
+                            <span>🔧</span> Tool Eseguiti:
+                        </div>
+                    `, 300);
 
-            } catch (error) {
-                console.error('Error generating response:', error);
-                showError('Errore nella generazione della risposta AI');
-                resetAIState();
-            }
-        }
+                    for (const tc of data.tool_calls) {
+                        const statusColor = tc.status === 'success' ? 'text-green-400' : 'text-red-400';
+                        const statusIcon = tc.status === 'success' ? '✅' : '❌';
+                        const toolEmoji = tc.tool_name === 'run_sql_query' ? '🗄️' :
+                            tc.tool_name === 'get_table_schema' ? '📋' :
+                                tc.tool_name === 'consult_manuals' ? '📚' : '⚙️';
 
-        // Regenerate response
-        async function regenerateResponse() {
-            if (!currentTicket) return;
-            await generateResponse();
-        }
+                        const escapeHtml = (text) => {
+                            if (!text) return '';
+                            const div = document.createElement('div');
+                            div.textContent = text;
+                            return div.innerHTML;
+                        };
 
-        // Display AI response
-        function displayAIResponse(data) {
-            // Hide loading, show response
-            document.getElementById('aiLoadingState').classList.add('hidden');
-            document.getElementById('aiResponseState').classList.remove('hidden');
+                        await addLogWithDelay(logs, `
+                            <div class="tool-card bg-slate-800/80 rounded-xl p-4 mt-3 border border-slate-600">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="flex items-center gap-2 text-white font-bold">
+                                        <span class="text-xl">${toolEmoji}</span>
+                                        ${tc.tool_name}
+                                    </span>
+                                    <span class="${statusColor} font-semibold">${statusIcon}</span>
+                                </div>
+                                <div class="text-sm mb-2">
+                                    <span class="text-slate-400">Input:</span>
+                                    <code class="ml-2 bg-slate-900 px-2 py-1 rounded text-blue-300">${escapeHtml(tc.tool_input)}</code>
+                                </div>
+            <div class="text-sm">
+                                    <span class="text-slate-400">Output:</span>
+                                    <pre class="mt-1 bg-slate-900 p-2 rounded text-green-300 text-xs overflow-x-auto max-h-24">${escapeHtml(tc.tool_output)}</pre>
+                                </div>
+                            </div>
+                        `, 400);
+                    }
+                }
 
-            // Fill response editor
-            document.getElementById('responseEditor').value = data.suggested_response;
-
-            // Update confidence
-            const confidence = Math.round(data.confidence_score * 100);
-            document.getElementById('confidencePercentage').textContent = `${confidence}%`;
-            document.getElementById('confidenceBar').style.width = `${confidence}%`;
-
-            // Color confidence bar
-            const bar = document.getElementById('confidenceBar');
-            if (confidence >= 80) {
-                bar.className = 'confidence-bar h-2 rounded-full bg-green-500';
-                document.getElementById('confidenceText').textContent = 'Affidabilità alta - Risposta molto accurata';
-            } else if (confidence >= 60) {
-                bar.className = 'confidence-bar h-2 rounded-full bg-yellow-500';
-                document.getElementById('confidenceText').textContent = 'Affidabilità media - Controlla la risposta';
-            } else {
-                bar.className = 'confidence-bar h-2 rounded-full bg-red-500';
-                document.getElementById('confidenceText').textContent = 'Affidabilità bassa - Verifica accuratamente';
-            }
-
-            // Display sources
-            const sourcesList = document.getElementById('sourcesList');
-            sourcesList.innerHTML = '';
-
-            data.sources.forEach(source => {
-                const sourceCard = document.createElement('div');
-                sourceCard.className = 'bg-gray-50 rounded-lg p-3';
-
-                const typeIcon = source.type === 'knowledge_base' ? '📚' : '🎫';
-                const relevancePercentage = Math.round(source.relevance * 100);
-
-                sourceCard.innerHTML = `
-                    <div class="flex items-start justify-between mb-2">
-                        <span class="text-sm font-medium text-gray-800 flex items-center">
-                            ${typeIcon} ${source.title}
-                        </span>
-                        <span class="text-xs text-gray-500">${relevancePercentage}% rilevanza</span>
+                // Thought Process
+                await addLogWithDelay(logs, `
+                    <div class="terminal-line text-cyan-400 font-bold mt-4 flex items-center gap-2">
+                        <span>🧠</span> Analisi:
                     </div>
-                    <p class="text-xs text-gray-600">${source.snippet}</p>
+                `, 300);
+
+                const thoughts = data.thought_process.split('\n').filter(l => l.trim());
+                for (const line of thoughts.slice(0, 5)) {
+                    await addLogWithDelay(logs, `
+                        <div class="terminal-line text-slate-300 ml-6 text-sm">→ ${line}</div>
+                      `, 150);
+                }
+
+                if (data.sql_query_used && data.sql_query_used !== "N/A") {
+                    await addLogWithDelay(logs, `
+                        <div class="terminal-line text-purple-400 mt-2 flex items-center gap-2">
+                            <span>🔍</span> SQL: <code class="text-white bg-purple-900/30 px-2 py-0.5 rounded ml-1">${data.sql_query_used}</code>
+                        </div>
+                    `, 200);
+                }
+
+                // Coal Alert
+                if (data.coal_alert) {
+                    document.getElementById('coalAlert').classList.remove('hidden');
+                }
+
+                // Results
+                document.getElementById('resultPanel').classList.remove('hidden');
+
+                const checklist = document.getElementById('actionChecklist');
+                checklist.innerHTML = '';
+                data.action_checklist.forEach(action => {
+                    const li = document.createElement('li');
+                    li.className = "flex items-start gap-3 text-slate-200";
+                    li.innerHTML = `
+                        <input type="checkbox" class="mt-1 w-5 h-5 accent-green-500 rounded">
+                        <span class="text-sm">${action}</span>
+                    `;
+                    checklist.appendChild(li);
+                });
+
+                document.getElementById('finalResponse').innerText = data.suggested_response;
+
+            } catch (e) {
+                logs.innerHTML += `
+                    <div class="terminal-line text-red-400 mt-2 flex items-center gap-2">
+                        <span>❌</span> Errore: ${e.message}
+                    </div>
                 `;
-
-                sourcesList.appendChild(sourceCard);
-            });
-
-            // Display reasoning
-            document.getElementById('reasoningText').textContent = data.reasoning;
-        }
-
-        // Send response
-        function sendResponse() {
-            // Show success modal
-            document.getElementById('successModal').classList.remove('hidden');
-            document.getElementById('successModal').classList.add('flex');
-        }
-
-        // Close success modal
-        function closeSuccessModal() {
-            document.getElementById('successModal').classList.add('hidden');
-            document.getElementById('successModal').classList.remove('flex');
-            showTicketsList();
-        }
-
-        // Discard response
-        function discardResponse() {
-            if (confirm('Sei sicuro di voler scartare questa risposta?')) {
-                resetAIState();
+            } finally {
+                btn.innerHTML = `
+                    <span class="text-2xl">🎄</span>
+                    <span>Chiedi a Santa AI</span>
+                    <span class="text-2xl">🎄</span>
+                `;
+                btn.disabled = false;
             }
         }
 
-        // Show error message
-        function showError(message) {
-            alert(message); // In a real app, use a proper toast/notification system
-        }
+        loadTickets();
+    </script>
 
-        // Update timestamp
-        function updateTimestamp() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('it-IT', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-            document.getElementById('lastUpdate').textContent = timeString;
-        }
+    <script>
+        // Override regenerateWithFeedback with full implementation
+        window.regenerateWithFeedback = async function () {
+            const feedback = document.getElementById('regenerateFeedback').value.trim();
+            if (!feedback) {
+                alert('⚠️ Per favore, fornisci delle istruzioni per la rigenerazione.');
+                return;
+            }
+
+            if (!currentTicket) {
+                alert('⚠️ Nessun ticket selezionato');
+                return;
+            }
+
+            toggleRegenerateInput();
+            const btn = document.getElementById('generateBtn');
+            btn.innerHTML = '<span class="animate-spin">🔄</span> Rigenerazione in corso...';
+            btn.disabled = true;
+
+            const terminal = document.getElementById('terminalOutput');
+            const logs = document.getElementById('terminalLogs');
+            terminal.classList.remove('hidden');
+            logs.innerHTML = '';
+
+            await addLogWithDelay(logs, '<div class="terminal-line text-blue-400 flex items-center gap-2"><span>🔄</span> Rigenerazione con feedback utente...</div>', 100);
+
+            try {
+                const payload = {
+                    ticket: currentTicket,
+                    image_base64: selectedImageBase64 ? selectedImageBase64.split(',')[1] : null,
+                    regeneration_feedback: feedback
+                };
+
+                const res = await fetch(`${API_BASE}/tickets/generate-response`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+
+                if (data.tool_calls && data.tool_calls.length > 0) {
+                    await addLogWithDelay(logs, '<div class="terminal-line text-yellow-400 font-bold mt-3 text-lg flex items-center gap-2"><span>🔧</span> Tool Eseguiti:</div>', 300);
+
+                    for (const tc of data.tool_calls) {
+                        const statusColor = tc.status === 'success' ? 'text-green-400' : 'text-red-400';
+                        const statusIcon = tc.status === 'success' ? '✅' : '❌';
+                        const toolEmoji = tc.tool_name.includes('sql') ? '🗄️' : tc.tool_name.includes('schema') ? '📋' : '📚';
+
+                        const escapeHtml = (text) => {
+                            if (!text) return '';
+                            const div = document.createElement('div');
+                            div.textContent = text;
+                            return div.innerHTML;
+                        };
+
+                        await addLogWithDelay(logs, `<div class="tool-card bg-slate-800/80 rounded-xl p-4 mt-3 border border-slate-600"><div class="flex items-center justify-between mb-3"><span class="flex items-center gap-2 text-white font-bold"><span class="text-xl">${toolEmoji}</span>${tc.tool_name}</span><span class="${statusColor} font-semibold">${statusIcon}</span></div><div class="text-sm mb-2"><span class="text-slate-400">Input:</span><code class="ml-2 bg-slate-900 px-2 py-1 rounded text-blue-300">${escapeHtml(tc.tool_input)}</code></div><div class="text-sm"><span class="text-slate-400">Output:</span><pre class="mt-1 bg-slate-900 p-2 rounded text-green-300 text-xs overflow-x-auto max-h-24">${escapeHtml(tc.tool_output)}</pre></div></div>`, 400);
+                    }
+                }
+
+                const thoughts = data.thought_process.split('\n').filter(l => l.trim());
+                for (const line of thoughts.slice(0, 5)) {
+                    await addLogWithDelay(logs, `<div class="terminal-line text-slate-300 ml-6 text-sm">→ ${line}</div>`, 150);
+                }
+
+                if (data.coal_alert) {
+                    document.getElementById('coalAlert').classList.remove('hidden');
+                } else {
+                    document.getElementById('coalAlert').classList.add('hidden');
+                }
+
+                document.getElementById('finalResponse').innerText = data.suggested_response;
+
+                const checklist = document.getElementById('actionChecklist');
+                checklist.innerHTML = '';
+                data.action_checklist.forEach(action => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start gap-3 bg-slate-800/50 p-3 rounded-lg border border-green-900/30';
+                    li.innerHTML = `<input type="checkbox" class="mt-1 w-4 h-4 text-green-500 bg-slate-700 border-slate-600 rounded focus:ring-2 focus:ring-green-500" /><span class="text-slate-200">${action}</span>`;
+                    checklist.appendChild(li);
+                });
+
+                document.getElementById('regenerateFeedback').value = '';
+                btn.innerHTML = '<span class="text-2xl">🎄</span> <span>Chiedi a Santa AI</span> <span class="text-2xl">🎄</span>';
+                btn.disabled = false;
+
+            } catch (e) {
+                console.error('Errore rigenerazione:', e);
+                alert('❌ Errore durante la rigenerazione. Riprova.');
+                btn.innerHTML = '<span class="text-2xl">🎄</span> <span>Chiedi a Santa AI</span> <span class="text-2xl">🎄</span>';
+                btn.disabled = false;
+            }
+        };
     </script>
 </body>
+
 </html>

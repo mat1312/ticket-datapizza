@@ -1,0 +1,37 @@
+=== NORTH POLE CUSTOMER SERVICE HANDBOOK ===
+
+GESTIONE RECLAMI BAMBINI/GENITORI:
+
+RITARDI CONSEGNA:
+- Causa Meteo: Spiegare condizioni artiche, offrire tracciamento magico.
+- Causa Overstock: Priorità immediata + scuse ufficiali da Santa.
+- Compensazione Standard: Biscotto magico extra nella consegna successiva.
+- Cliente Premium (>3 ordini/anno): Upgrade gratuito a "Consegna Express Renna".
+
+REGALO SBAGLIATO:
+- Verifica ordine su Database Children (child_id, wish_list).
+- Se errore nostro: Sostituzione immediata + regalo bonus.
+- Se errore bambino (cambio idea): Spiegare policy, offrire scambio una tantum.
+
+BAMBINO NELLA NAUGHTY LIST:
+- Naughty Score 50-70: Spiegare con tatto, suggerire buone azioni per migliorare.
+- Naughty Score 70-85: Coal standard + lettera motivazionale.
+- Naughty Score >85: Coal premium + incontro con Elfo Consulente Comportamentale.
+- ATTENZIONE: Mai dire direttamente "sei cattivo", usare "opportunità di crescita".
+
+ESCALATION:
+- Livello 1: Customer Service Elf (casi standard).
+- Livello 2: Senior Gift Coordinator (reclami complessi).
+- Livello 3: Mrs. Claus (casi critici, minaccia reputazione).
+- Livello 4: Santa Claus (solo emergenze assolute).
+
+TONO COMUNICAZIONE:
+- Sempre allegro e natalizio.
+- Usare emoji: 🎄🎁⭐ (ma con moderazione).
+- Firmare: "Con spirito natalizio, [Nome Elfo]".
+- Mai promettere l'impossibile (es. "regalo entro 1 ora" il 24 Dicembre).
+
+METRICHE:
+- Tempo risposta: <2 ore (standard), <30 min (premium).
+- Satisfaction target: 4.5/5 stelle.
+- First Contact Resolution: >80%.

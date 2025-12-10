@@ -10,7 +10,7 @@ datapizza-ai
 datapizza-ai-clients-openai
 datapizza-ai-vectorstores-qdrant
 datapizza-ai-embedders-openai
-
+datapizza-ai-tools-sqldatabase
 # Vector database
 qdrant-client
 

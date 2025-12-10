@@ -1,0 +1,35 @@
+=== NORTH POLE IT & SECURITY MANUAL ===
+
+ACCESSO SISTEMI:
+- VPN Polare: Connessione obbligatoria per accesso remoto.
+- Credenziali: Username = ELF-[ID], Password cambiata ogni 90 giorni.
+- Autenticazione: 2FA con Fiocco di Neve Token obbligatorio.
+- Reset Password: Ticket a IT-Support o visita Helpdesk Igloo-7.
+
+TROUBLESHOOTING VPN:
+- Errore "Autenticazione Fallita": 
+  1. Verificare maiuscole/minuscole username
+  2. Controllare scadenza password (90 giorni)
+  3. Verificare 2FA Token sincronizzato
+  4. Se persistente, contattare IT: it-support@northpole.santa
+
+- Errore "Connessione Timeout":
+  1. Verificare connessione internet locale
+  2. Provare server VPN alternativo (vpn2.northpole.santa)
+  3. Disattivare firewall temporaneamente per test
+
+SICUREZZA DATABASE:
+- Nice/Naughty List: Accesso SOLO a livello Manager+.
+- Children Database: Criptazione AES-256 + Magia Natalizia.
+- Tentativi Hacking: Blocco IP automatico + Alert Security Team.
+- SQL Injection: Firewall magico attivo, penalità +50 Naughty Score per tentativi.
+
+BACKUP & RECOVERY:
+- Backup giornaliero: 03:00 AM (ora Polo Nord).
+- Retention: 30 giorni standard, 1 anno per dati critici.
+- Disaster Recovery: Datacenter secondario presso Aurora Boreale Station.
+
+HELPDESK IT:
+- Orari: 24/7 durante Dicembre, 8:00-18:00 resto dell'anno.
+- Ticket System: helpdesk.northpole.santa
+- Emergenze: Ext. 911-TECH

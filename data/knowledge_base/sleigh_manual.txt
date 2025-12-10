@@ -1,0 +1,23 @@
+=== SLEIGH MARK-VII TECHNICAL MANUAL ===
+
+ENGINE PLASMA SYSTEMS:
+- Normal Operating Temp: 3000-4500 K.
+- Warning Level: > 5000 K (Cooldown required immediately).
+- Fuel Source: Starlight Condensate (Check tank pressure daily, avg 1500 PSI).
+- Plasma Injectors: Clean every 5000 flight hours using moon-dust solution.
+
+ANTI-GRAVITY STABILIZERS:
+- Fluctuation Tolerance: +/- 0.5 G.
+- Error Code AG-404: "Gravity Not Found" - Reboot main core.
+- Error Code AG-500: "Overweight Capacity" - Eject backup coal reserves.
+- Calibration: Perform "Figure-8" maneuver over Pacific Ocean to recalibrate.
+
+NAVIGATION (GPS - Global Polar Positioning):
+- Signal Loss: Switch to auxiliary reindeer senses (Rudolph Protocol).
+- Map Updates: Daily sync with Nice/Naughty database for rooftop geometry.
+- Interference: Northern Lights can cause 2% drift. Enable "Aurora Shielding".
+
+EMERGENCY PROCEDURES:
+- Engine Failure: Deploy emergency parachutes and glide to nearest safe roof.
+- Reindeer Fatigue: Administer emergency magic lichen supplements.
+- Sleigh Overturn: Activate "Right-Side-Up" gyro mechanism (Button RED-1).
