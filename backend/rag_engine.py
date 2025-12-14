@@ -29,7 +29,7 @@ class RAGEngine:
             api_key = "placeholder"
 
         # Initialize OpenAI Client (shared across agents)
-        self.client = OpenAIClient(api_key=api_key, model="gpt-4o")
+        self.client = OpenAIClient(api_key=api_key, model="gpt-4.1-mini")
         
         # Tool calls tracker - reset per request
         self.tool_calls_log: List[ToolCall] = []

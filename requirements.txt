@@ -16,3 +16,4 @@ qdrant-client
 
 # Utilities
 numpy>=1.24.0
+pytest>=7.4.0

@@ -14,13 +14,31 @@ L'applicazione simula un ufficio reclami dove i genitori scrivono a Babbo Natale
 
 | Componente | Tecnologia |
 |------------|------------|
+| **AI Framework** | **[DataPizza AI](https://datapizza.tech)** |
+| &nbsp;&nbsp;&nbsp;&nbsp;↳ *Agents* | Multi-Agent System (Master + Sub-agents), Planning, Tool Use |
+| &nbsp;&nbsp;&nbsp;&nbsp;↳ *Clients* | OpenAIClient (GPT-4.1), Structured Responses (Pydantic), Streaming |
+| &nbsp;&nbsp;&nbsp;&nbsp;↳ *Memory* | Context Preservation, Tracing |
+| &nbsp;&nbsp;&nbsp;&nbsp;↳ *RAG* | ChunkEmbedder, RecursiveSplitter, QdrantVectorstore |
+| &nbsp;&nbsp;&nbsp;&nbsp;↳ *Tools* | SQLDatabase (SQLite), Function Calling |
 | Backend | FastAPI + Python |
-| AI Framework | DataPizza AI (Multi-Agent) |
-| LLM | OpenAI GPT-4o |
-| Embedding | OpenAI text-embedding-3-small |
-| Vector DB | Qdrant (in-memory o cloud) |
-| Database | SQLite |
+| Database | SQLite (Relational), Qdrant (Vector) |
 | Frontend | HTML + Tailwind CSS + JavaScript |
+
+## DataPizza AI Features Implementation
+
+Il progetto sfrutta appieno l'ecosistema **DataPizza AI**:
+
+*   **Agents Core**: Architettura multi-agente con `Agent` e comunicazione inter-agente (`can_call`).
+*   **Advanced RAG Pipeline**:
+    *   **Ingestion**: Utilizzo di `RecursiveSplitter` per chunking semantico intelligente.
+    *   **Embedding**: Implementazione di `ChunkEmbedder` per processamento batch ottimizzato.
+    *   **Vector Store**: Integrazione nativa con `QdrantVectorstore` per la ricerca semantica.
+*   **Strumenti e Connettività**:
+    *   **SQLDatabase Tool**: Introspezione schema ed esecuzione query sicure su SQLite.
+    *   **Custom Tools**: Decoratore `@tool` per funzioni Python custom con tracing integrato.
+*   **Observability & Robustness**:
+    *   **Tracing**: Monitoraggio granulare tramite `ContextTracing`.
+    *   **Structured Outputs**: Garanzia di formato JSON valido tramite `client.structured_response` e modelli Pydantic.
 
 ## Struttura Progetto
 
@@ -101,9 +119,12 @@ QDRANT_API_KEY=your-qdrant-api-key
 
 ### Avvio
 
+### Avvio
+
 ```bash
-# Popola il database (solo prima volta)
-python populate_db.py
+# Setup completo (Database & RAG)
+python backend/scripts/setup_db.py
+python backend/scripts/setup_rag.py
 
 # Avvia il server
 python backend/main.py
