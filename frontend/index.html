@@ -1171,7 +1171,7 @@
             if (!currentTicket) return;
 
             const btn = document.getElementById('generateBtn');
-            btn.innerHTML = '<span class="animate-spin">🔄</span> Santa sta pensando...';
+            btn.innerHTML = '<span class="animate-spin">🔄</span> Elaborazione...';
             btn.disabled = true;
 
             const terminal = document.getElementById('terminalOutput');
@@ -1273,9 +1273,9 @@
                 `;
             } finally {
                 btn.innerHTML = `
-                    <span class="text-2xl">🎄</span>
-                    <span>Chiedi a Santa AI</span>
-                    <span class="text-2xl">🎄</span>
+                    <span class="text-2xl">📋</span>
+                    <span>Elabora Reclami</span>
+                    <span class="text-2xl">📋</span>
                 `;
                 btn.disabled = false;
             }
@@ -1367,13 +1367,13 @@
                 });
 
                 document.getElementById('regenerateFeedback').value = '';
-                btn.innerHTML = '<span class="text-2xl">🎄</span> <span>Chiedi a Santa AI</span> <span class="text-2xl">🎄</span>';
+                btn.innerHTML = '<span class="text-2xl">📋</span> <span>Elabora Reclami</span> <span class="text-2xl">📋</span>';
                 btn.disabled = false;
 
             } catch (e) {
                 console.error('Errore rigenerazione:', e);
                 alert('❌ Errore durante la rigenerazione. Riprova.');
-                btn.innerHTML = '<span class="text-2xl">🎄</span> <span>Chiedi a Santa AI</span> <span class="text-2xl">🎄</span>';
+                btn.innerHTML = '<span class="text-2xl">📋</span> <span>Elabora Reclami</span> <span class="text-2xl">📋</span>';
                 btn.disabled = false;
             }
         };

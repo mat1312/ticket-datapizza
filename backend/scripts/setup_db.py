@@ -93,6 +93,13 @@ def setup_db():
     ''', children)
     print(f"   - Inserted {len(children)} children")
 
+    # Specific Insert for Demo (ID 8847)
+    cursor.execute('''
+    INSERT INTO children_log (id, name, city, naughty_score, last_incident, gift_requested, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ''', (8847, "Tommy Rossi", "Rome", 73, "Pranked the teacher", "PlayStation 5", "COAL"))
+    print("   - Inserted specialized demo child: Tommy Rossi (ID 8847)")
+
     # --- Inventory Data ---
     inventory_items = [
         # Well stocked items

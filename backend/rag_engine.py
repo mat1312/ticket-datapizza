@@ -4,6 +4,9 @@ RAG Engine con Multi-Agent Pattern (Best Practices datapizza-ai)
 import os
 import json
 from typing import Optional, List
+
+
+
 from datapizza.agents import Agent
 from datapizza.tools import tool
 from datapizza.tracing import ContextTracing
@@ -194,7 +197,7 @@ REGOLE:
 - DEVI SEMPRE eseguire almeno una query prima di rispondere
 - Rispondi in modo conciso con i dati trovati""",
             tools=[list_tables, get_table_schema, run_sql_query],
-            max_steps=10  # Limite anti-loop
+            max_steps=4  # Limite anti-loop
         )
 
         # RAG/Manual Expert Agent
@@ -212,7 +215,7 @@ Quando ricevi una domanda:
 2. Sintetizza le informazioni combinando teoria (manuali) e pratica (ticket passati)
 3. Cita se la soluzione viene da un manuale o da un vecchio ticket ("Come visto nel ticket NP-XXX...")""",
             tools=[search_knowledge_base, search_past_tickets],
-            max_steps=10  # Limite anti-loop
+            max_steps=4  # Limite anti-loop
         )
 
         # ====== 5. MASTER AGENT WITH can_call ======
@@ -248,7 +251,7 @@ LA TUA RISPOSTA FINALE DEVE ESSERE UN OGGETTO JSON VALIDO:
 {schema_json}
 
 Rispondi SEMPRE in italiano.""",
-            max_steps=15  # Limite più alto per master agent (chiama sub-agents)
+            max_steps=6  # Limite più alto per master agent (chiama sub-agents)
         )
         
         # Enable Multi-Agent Communication
